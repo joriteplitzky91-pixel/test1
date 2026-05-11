@@ -3,24 +3,24 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Borrow — Rent clothes near you</title>
+<title>Borrowed — Rent clothes near you</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --bg: #F5F2EE;
-  --surface: #FDFCFA;
-  --surface2: #F0EDE8;
-  --border: rgba(0,0,0,0.07);
-  --border2: rgba(0,0,0,0.13);
-  --text: #1C1A17;
-  --muted: #6A6660;
-  --hint: #A8A49D;
-  --green: #2A5C40;
-  --green-light: #E8F2EC;
-  --green-mid: #4A8C64;
+  --bg: #F4F8FC;
+  --surface: #FFFFFF;
+  --surface2: #EBF2F8;
+  --border: rgba(0,0,0,0.06);
+  --border2: rgba(0,0,0,0.12);
+  --text: #111827;
+  --muted: #4B5563;
+  --hint: #9CA3AF;
+  --blue: #1A6FB5;
+  --blue-light: #DFF0FB;
+  --blue-mid: #4A9AC8;
   --amber: #B8720E;
   --amber-light: #FDF3E0;
   --red: #C0392B;
@@ -42,10 +42,10 @@ body {
 /* Page header */
 .page-header { text-align: center; margin-bottom: 36px; }
 .wordmark { font-family: 'Playfair Display', serif; font-size: 40px; color: var(--text); line-height: 1; margin-bottom: 6px; }
-.wordmark span { color: var(--green); font-style: italic; }
+.wordmark span { color: var(--blue); font-style: italic; }
 .tagline { font-size: 13px; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; font-weight: 400; }
-.proto-badge { display: inline-flex; align-items: center; gap: 6px; margin-top: 10px; font-size: 11px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: var(--green); background: var(--green-light); padding: 5px 12px; border-radius: 20px; }
-.proto-badge::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--green); display: inline-block; animation: pulse 2s infinite; }
+.proto-badge { display: inline-flex; align-items: center; gap: 6px; margin-top: 10px; font-size: 11px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: var(--blue); background: var(--blue-light); padding: 5px 12px; border-radius: 20px; }
+.proto-badge::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--blue); display: inline-block; animation: pulse 2s infinite; }
 @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
 
 /* Phone */
@@ -80,20 +80,20 @@ body {
 .bnav { display: flex; border-top: 1px solid var(--border); padding: 10px 0 22px; background: var(--surface); flex-shrink: 0; }
 .bnav-item { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px; cursor: pointer; color: var(--hint); font-size: 9px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; transition: color 0.15s; }
 .bnav-item:hover { color: var(--muted); }
-.bnav-item.on { color: var(--green); }
+.bnav-item.on { color: var(--blue); }
 .bnav-item svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
 
 /* Buttons */
 .btn { width: 100%; padding: 15px; border-radius: var(--rsm); border: none; font-size: 15px; font-weight: 600; font-family: 'Jost', sans-serif; cursor: pointer; transition: all 0.15s; letter-spacing: 0.02em; }
 .btn:active { transform: scale(0.98); }
-.btn-green { background: var(--green); color: #fff; }
-.btn-green:hover { background: #224d35; }
+.btn-green { background: var(--blue); color: #fff; }
+.btn-green:hover { background: #155a96; }
 .btn-outline { background: transparent; border: 1.5px solid var(--border2); color: var(--text); }
 .btn-outline:hover { background: var(--surface2); }
 
 /* Tags */
 .tag { font-size: 11px; font-weight: 600; padding: 4px 10px; border-radius: 6px; letter-spacing: 0.04em; text-transform: uppercase; }
-.tag-green { background: var(--green-light); color: var(--green); }
+.tag-green { background: var(--blue-light); color: var(--blue); }
 .tag-gray { background: var(--surface2); color: var(--muted); }
 .tag-amber { background: var(--amber-light); color: var(--amber); }
 
@@ -106,7 +106,7 @@ body {
 /* Form */
 .flabel { font-size: 11px; font-weight: 600; color: var(--muted); display: block; margin-bottom: 5px; letter-spacing: 0.06em; text-transform: uppercase; }
 .finput { width: 100%; padding: 12px 14px; border-radius: var(--rsm); border: 1.5px solid var(--border2); font-size: 14px; font-family: 'Jost', sans-serif; color: var(--text); background: var(--surface); outline: none; transition: border-color 0.15s; }
-.finput:focus { border-color: var(--green); }
+.finput:focus { border-color: var(--blue); }
 .finput::placeholder { color: var(--hint); }
 textarea.finput { height: 80px; resize: none; }
 select.finput { appearance: none; background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%236A6660' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; }
@@ -119,7 +119,7 @@ select.finput { appearance: none; background-image: url("data:image/svg+xml,%3Cs
 .chips { display: flex; gap: 7px; overflow-x: auto; scrollbar-width: none; padding-bottom: 2px; }
 .chips::-webkit-scrollbar { display: none; }
 .chip { display: inline-flex; align-items: center; padding: 7px 16px; border-radius: 24px; border: 1.5px solid var(--border2); font-size: 12px; font-weight: 600; cursor: pointer; white-space: nowrap; color: var(--muted); background: var(--surface); font-family: 'Jost', sans-serif; transition: all 0.15s; letter-spacing: 0.02em; }
-.chip:hover { border-color: var(--green); color: var(--green); }
+.chip:hover { border-color: var(--blue); color: var(--blue); }
 .chip.on { background: var(--text); color: #fff; border-color: var(--text); }
 
 /* Item card */
@@ -142,11 +142,11 @@ select.finput { appearance: none; background-image: url("data:image/svg+xml,%3Cs
 /* Step indicator */
 .steps { display: flex; align-items: center; gap: 0; margin-bottom: 20px; }
 .step-dot { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; transition: all 0.2s; }
-.step-dot.done { background: var(--green); color: #fff; }
+.step-dot.done { background: var(--blue); color: #fff; }
 .step-dot.active { background: var(--text); color: #fff; }
 .step-dot.todo { background: var(--surface2); color: var(--hint); }
 .step-line { flex: 1; height: 2px; background: var(--border2); }
-.step-line.done { background: var(--green); }
+.step-line.done { background: var(--blue); }
 
 /* Toast */
 .toast { position: absolute; bottom: 100px; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--text); color: #fff; padding: 10px 20px; border-radius: 24px; font-size: 13px; font-weight: 500; white-space: nowrap; opacity: 0; transition: all 0.3s; pointer-events: none; z-index: 100; }
@@ -154,8 +154,8 @@ select.finput { appearance: none; background-image: url("data:image/svg+xml,%3Cs
 
 /* Date picker row */
 .datebox { flex: 1; padding: 12px 13px; border-radius: var(--rsm); border: 1.5px solid var(--border2); cursor: pointer; transition: border-color 0.15s; }
-.datebox:hover { border-color: var(--green); }
-.datebox.active { border-color: var(--green); background: var(--green-light); }
+.datebox:hover { border-color: var(--blue); }
+.datebox.active { border-color: var(--blue); background: var(--blue-light); }
 .datebox .dl { font-size: 10px; font-weight: 600; color: var(--hint); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 3px; }
 .datebox .dv { font-size: 14px; font-weight: 600; color: var(--text); }
 
@@ -189,38 +189,38 @@ select.finput { appearance: none; background-image: url("data:image/svg+xml,%3Cs
 .toggle { position: relative; width: 38px; height: 22px; flex-shrink: 0; }
 .toggle input { opacity: 0; width: 0; height: 0; }
 .toggle-track { position: absolute; inset: 0; border-radius: 22px; background: var(--border2); cursor: pointer; transition: background 0.2s; }
-.toggle input:checked + .toggle-track { background: var(--green); }
+.toggle input:checked + .toggle-track { background: var(--blue); }
 .toggle-track::after { content: ''; position: absolute; left: 3px; top: 3px; width: 16px; height: 16px; border-radius: 50%; background: #fff; transition: transform 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.2); }
 .toggle input:checked + .toggle-track::after { transform: translateX(16px); }
 
 /* Avatar upload circle */
 .av-upload { position: relative; cursor: pointer; }
-.av-upload-badge { position: absolute; bottom: 0; right: 0; width: 22px; height: 22px; border-radius: 50%; background: var(--green); display: flex; align-items: center; justify-content: center; border: 2px solid var(--surface); }
+.av-upload-badge { position: absolute; bottom: 0; right: 0; width: 22px; height: 22px; border-radius: 50%; background: var(--blue); display: flex; align-items: center; justify-content: center; border: 2px solid var(--surface); }
 
 /* Success screen */
-.success-icon { width: 64px; height: 64px; border-radius: 50%; background: var(--green-light); display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; }
-.success-icon svg { width: 32px; height: 32px; stroke: var(--green); fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+.success-icon { width: 64px; height: 64px; border-radius: 50%; background: var(--blue-light); display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; }
+.success-icon svg { width: 32px; height: 32px; stroke: var(--blue); fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
 
 /* Nav tabs below phone */
 .ntabs { display: flex; gap: 6px; margin-top: 20px; flex-wrap: wrap; justify-content: center; max-width: 360px; }
 .ntab { font-size: 12px; font-weight: 600; padding: 7px 16px; border-radius: 24px; border: 1.5px solid var(--border2); background: var(--surface); color: var(--muted); cursor: pointer; font-family: 'Jost', sans-serif; transition: all 0.15s; letter-spacing: 0.02em; }
-.ntab:hover { border-color: var(--green); color: var(--green); }
-.ntab.on { background: var(--green); color: #fff; border-color: var(--green); }
+.ntab:hover { border-color: var(--blue); color: var(--blue); }
+.ntab.on { background: var(--blue); color: #fff; border-color: var(--blue); }
 
 .foot { margin-top: 24px; font-size: 12px; color: var(--hint); text-align: center; max-width: 300px; line-height: 1.8; }
 
 /* Item colors */
-.ic0 { background: linear-gradient(135deg, #E8E2D8 0%, #D4CFC6 100%); }
-.ic1 { background: linear-gradient(135deg, #DDE6E2 0%, #C8D8D2 100%); }
-.ic2 { background: linear-gradient(135deg, #E6E0D4 0%, #D4CAC0 100%); }
-.ic3 { background: linear-gradient(135deg, #E2DDE8 0%, #CEC8D8 100%); }
-.ic4 { background: linear-gradient(135deg, #E8E4DC 0%, #D8D2C8 100%); }
+.ic0 { background: linear-gradient(135deg, #E8F1F8 0%, #D0E4F0 100%); }
+.ic1 { background: linear-gradient(135deg, #E4EEF6 0%, #CCDFEE 100%); }
+.ic2 { background: linear-gradient(135deg, #EDF3F8 0%, #D8E8F2 100%); }
+.ic3 { background: linear-gradient(135deg, #E6EFF6 0%, #D2E2EE 100%); }
+.ic4 { background: linear-gradient(135deg, #EAF2F8 0%, #D4E6F2 100%); }
 </style>
 </head>
 <body>
 
 <div class="page-header">
-  <div class="wordmark">bor<span>row</span></div>
+  <div class="wordmark">borrow<span>ed</span></div>
   <p class="tagline">Rent clothes from people near you</p>
   <span class="proto-badge">User testing prototype</span>
 </div>
@@ -272,7 +272,7 @@ select.finput { appearance: none; background-image: url("data:image/svg+xml,%3Cs
             </div>
             <div style="display:flex;align-items:center;justify-content:space-between;">
               <div style="display:flex;align-items:center;gap:7px;">
-                <div class="av" style="width:24px;height:24px;font-size:10px;background:var(--green-light);color:var(--green);">JL</div>
+                <div class="av" style="width:24px;height:24px;font-size:10px;background:var(--blue-light);color:var(--blue);">JL</div>
                 <span style="font-size:12px;color:var(--muted);">Jessica L.</span>
                 <span class="stars" style="font-size:11px;">★★★★★</span>
                 <span style="font-size:12px;color:var(--muted);">4.9</span>
@@ -329,7 +329,7 @@ select.finput { appearance: none; background-image: url("data:image/svg+xml,%3Cs
             </div>
             <div style="display:flex;align-items:center;justify-content:space-between;">
               <div style="display:flex;align-items:center;gap:7px;">
-                <div class="av" style="width:24px;height:24px;font-size:10px;background:#EDF3F8;color:#2A6090;">SC</div>
+                <div class="av" style="width:24px;height:24px;font-size:10px;background:#DFF0FB;color:#1A6FB5;">SC</div>
                 <span style="font-size:12px;color:var(--muted);">Sara C.</span>
                 <span class="stars" style="font-size:11px;">★★★★★</span>
                 <span style="font-size:12px;color:var(--muted);">4.8</span>
@@ -348,7 +348,7 @@ select.finput { appearance: none; background-image: url("data:image/svg+xml,%3Cs
             </div>
             <div style="display:flex;align-items:center;justify-content:space-between;">
               <div style="display:flex;align-items:center;gap:7px;">
-                <div class="av" style="width:24px;height:24px;font-size:10px;background:var(--green-light);color:var(--green);">TN</div>
+                <div class="av" style="width:24px;height:24px;font-size:10px;background:var(--blue-light);color:var(--blue);">TN</div>
                 <span style="font-size:12px;color:var(--muted);">Tara N.</span>
                 <span class="stars" style="font-size:11px;">★★★★★</span>
                 <span style="font-size:12px;color:var(--muted);">4.6</span>
@@ -391,7 +391,7 @@ select.finput { appearance: none; background-image: url("data:image/svg+xml,%3Cs
           <span id="d-dist" class="tag tag-gray"></span>
         </div>
         <div class="pcard" style="margin-bottom:16px;">
-          <div id="d-av" class="av" style="width:40px;height:40px;font-size:14px;background:var(--green-light);color:var(--green);"></div>
+          <div id="d-av" class="av" style="width:40px;height:40px;font-size:14px;background:var(--blue-light);color:var(--blue);"></div>
           <div style="flex:1;">
             <p id="d-owner" style="font-size:14px;font-weight:600;margin:0;color:var(--text);"></p>
             <p id="d-rating" style="font-size:12px;color:var(--hint);margin:0;"></p>
@@ -438,10 +438,10 @@ select.finput { appearance: none; background-image: url("data:image/svg+xml,%3Cs
         </div>
 
         <p style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:10px;letter-spacing:0.04em;text-transform:uppercase;">Payment method</p>
-        <div style="padding:13px 15px;border-radius:var(--rsm);border:2px solid var(--green);display:flex;align-items:center;gap:12px;margin-bottom:8px;background:var(--green-light);cursor:pointer;">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2" stroke-linecap="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+        <div style="padding:13px 15px;border-radius:var(--rsm);border:2px solid var(--blue);display:flex;align-items:center;gap:12px;margin-bottom:8px;background:var(--blue-light);cursor:pointer;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2" stroke-linecap="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
           <span style="flex:1;font-size:14px;font-weight:500;color:var(--text);">Visa ending 4242</span>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
         </div>
         <div onclick="showToast('Add payment coming soon!')" style="padding:13px 15px;border-radius:var(--rsm);border:1.5px dashed var(--border2);display:flex;align-items:center;gap:12px;margin-bottom:22px;cursor:pointer;color:var(--hint);">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
@@ -454,7 +454,7 @@ select.finput { appearance: none; background-image: url("data:image/svg+xml,%3Cs
           <div class="srow"><span>Service fee</span><span>$2</span></div>
           <div class="srow"><span>Total due today</span><span id="co-total"></span></div>
         </div>
-        <p style="font-size:11px;color:var(--hint);line-height:1.8;margin-bottom:20px;">By confirming, you agree to our <span style="color:var(--green);cursor:pointer;" onclick="showToast('Terms coming soon!')">rental terms</span>. A $50 damage deposit will be held on your card and released within 48 hours of a successful return.</p>
+        <p style="font-size:11px;color:var(--hint);line-height:1.8;margin-bottom:20px;">By confirming, you agree to our <span style="color:var(--blue);cursor:pointer;" onclick="showToast('Terms coming soon!')">rental terms</span>. A $50 damage deposit will be held on your card and released within 48 hours of a successful return.</p>
         <div style="height:8px;"></div>
       </div>
       <div style="padding:12px 20px 26px;border-top:1px solid var(--border);background:var(--surface);flex-shrink:0;">
@@ -467,7 +467,7 @@ select.finput { appearance: none; background-image: url("data:image/svg+xml,%3Cs
       <div class="statusbar"><span>9:41</span><div class="statusbar-icons"></div></div>
       <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 28px;text-align:center;">
         <div class="success-icon" style="width:72px;height:72px;margin-bottom:20px;">
-          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
         </div>
         <p style="font-family:'Playfair Display',serif;font-size:26px;color:var(--text);margin-bottom:8px;">You're confirmed!</p>
         <p style="font-size:14px;color:var(--muted);line-height:1.7;margin-bottom:28px;">Your rental for <strong id="cf-name" style="color:var(--text);font-weight:600;"></strong> is booked for <strong style="color:var(--text);">May 14 – 16</strong>. Jessica will send pickup details shortly.</p>
@@ -583,18 +583,18 @@ select.finput { appearance: none; background-image: url("data:image/svg+xml,%3Cs
       <div id="list-s3" class="scroll" style="padding:12px 20px 8px;display:none;">
         <p style="font-size:15px;font-weight:600;color:var(--text);margin-bottom:14px;">Pickup location</p>
         <div class="mapbox" style="margin-bottom:14px;" onclick="showToast('Location picker coming soon!')">
-          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="1.5" stroke-linecap="round" style="position:relative;z-index:1;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="1.5" stroke-linecap="round" style="position:relative;z-index:1;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
         </div>
         <div style="padding:12px 14px;border-radius:var(--rsm);border:1.5px solid var(--border2);display:flex;align-items:center;gap:10px;margin-bottom:14px;cursor:pointer;" onclick="showToast('Location picker coming soon!')">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2" stroke-linecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2" stroke-linecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
           <span style="font-size:14px;color:var(--text);">West Hollywood, CA 90046</span>
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--hint)" stroke-width="2" stroke-linecap="round" style="margin-left:auto;"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
         </div>
         <div style="margin-bottom:20px;"><label class="flabel">Pickup notes (optional)</label><input type="text" class="finput" placeholder="e.g. lobby of my building, or nearby café"></div>
-        <div style="background:var(--green-light);border-radius:var(--rsm);padding:14px 16px;margin-bottom:20px;">
-          <p style="font-size:12px;font-weight:600;color:var(--green);margin-bottom:6px;">Your estimated earnings</p>
-          <p style="font-size:22px;font-weight:700;color:var(--green);margin:0;">$9.60<span style="font-size:13px;font-weight:400;color:var(--green-mid);"> /day</span></p>
-          <p style="font-size:11px;color:var(--green-mid);margin:4px 0 0;">After 20% platform fee. You keep 80%.</p>
+        <div style="background:var(--blue-light);border-radius:var(--rsm);padding:14px 16px;margin-bottom:20px;">
+          <p style="font-size:12px;font-weight:600;color:var(--blue);margin-bottom:6px;">Your estimated earnings</p>
+          <p style="font-size:22px;font-weight:700;color:var(--blue);margin:0;">$9.60<span style="font-size:13px;font-weight:400;color:var(--blue-mid);"> /day</span></p>
+          <p style="font-size:11px;color:var(--blue-mid);margin:4px 0 0;">After 20% platform fee. You keep 80%.</p>
         </div>
         <div style="display:flex;gap:10px;margin-bottom:16px;">
           <button class="btn btn-outline" style="flex:1;" onclick="listNext(2)">← Back</button>
@@ -614,15 +614,15 @@ select.finput { appearance: none; background-image: url("data:image/svg+xml,%3Cs
         <div style="background:var(--surface2);border-radius:var(--r);padding:18px 20px;width:100%;margin-bottom:28px;text-align:left;">
           <p style="font-size:11px;font-weight:600;color:var(--hint);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:12px;">What happens next</p>
           <div style="display:flex;gap:10px;margin-bottom:12px;align-items:start;">
-            <span style="width:22px;height:22px;border-radius:50%;background:var(--green);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">1</span>
+            <span style="width:22px;height:22px;border-radius:50%;background:var(--blue);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">1</span>
             <p style="font-size:13px;color:var(--muted);margin:0;line-height:1.6;">A renter requests your item — you approve or decline within 24h.</p>
           </div>
           <div style="display:flex;gap:10px;margin-bottom:12px;align-items:start;">
-            <span style="width:22px;height:22px;border-radius:50%;background:var(--green);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">2</span>
+            <span style="width:22px;height:22px;border-radius:50%;background:var(--blue);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">2</span>
             <p style="font-size:13px;color:var(--muted);margin:0;line-height:1.6;">Arrange pickup at your chosen location.</p>
           </div>
           <div style="display:flex;gap:10px;align-items:start;">
-            <span style="width:22px;height:22px;border-radius:50%;background:var(--green);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">3</span>
+            <span style="width:22px;height:22px;border-radius:50%;background:var(--blue);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">3</span>
             <p style="font-size:13px;color:var(--muted);margin:0;line-height:1.6;">Get paid when they return it. Simple.</p>
           </div>
         </div>
@@ -640,7 +640,7 @@ select.finput { appearance: none; background-image: url("data:image/svg+xml,%3Cs
       <div class="scroll" style="padding:20px 20px 8px;">
         <!-- Hero card -->
         <div style="display:flex;flex-direction:column;align-items:center;margin-bottom:24px;padding-bottom:24px;border-bottom:1px solid var(--border);">
-          <div class="av" id="profile-av" style="width:72px;height:72px;font-size:24px;background:var(--green-light);color:var(--green);margin-bottom:12px;">YO</div>
+          <div class="av" id="profile-av" style="width:72px;height:72px;font-size:24px;background:var(--blue-light);color:var(--blue);margin-bottom:12px;">YO</div>
           <p id="profile-name" style="font-size:18px;font-weight:600;color:var(--text);margin:0 0 2px;font-family:'Playfair Display',serif;">Your Name</p>
           <p id="profile-bio" style="font-size:13px;color:var(--hint);margin:0 0 12px;text-align:center;"></p>
           <p style="font-size:12px;color:var(--hint);margin:0 0 14px;">Member since May 2025</p>
@@ -657,7 +657,7 @@ select.finput { appearance: none; background-image: url("data:image/svg+xml,%3Cs
         <div style="margin-bottom:8px;">
           <div class="pmrow" onclick="go('s-edit-profile')">
             <div class="pmrow-left">
-              <div class="pmrow-icon" style="background:#E8F2EC;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2" stroke-linecap="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+              <div class="pmrow-icon" style="background:#E8F2EC;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2" stroke-linecap="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
               <span style="font-size:14px;color:var(--text);">Edit profile</span>
             </div>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--hint)" stroke-width="2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
@@ -667,7 +667,7 @@ select.finput { appearance: none; background-image: url("data:image/svg+xml,%3Cs
               <div class="pmrow-icon" style="background:#EDF3F8;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2A6090" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
               <div>
                 <span style="font-size:14px;color:var(--text);">Booking history</span>
-                <span style="margin-left:8px;font-size:11px;font-weight:600;background:var(--green-light);color:var(--green);padding:2px 7px;border-radius:10px;">1 active</span>
+                <span style="margin-left:8px;font-size:11px;font-weight:600;background:var(--blue-light);color:var(--blue);padding:2px 7px;border-radius:10px;">1 active</span>
               </div>
             </div>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--hint)" stroke-width="2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
@@ -722,13 +722,13 @@ select.finput { appearance: none; background-image: url("data:image/svg+xml,%3Cs
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
         </div>
         <p style="font-size:16px;font-weight:600;color:var(--text);margin:0;">Edit profile</p>
-        <button onclick="saveProfile()" style="margin-left:auto;font-size:13px;font-weight:600;color:var(--green);background:none;border:none;cursor:pointer;font-family:'Jost',sans-serif;padding:4px 0;">Save</button>
+        <button onclick="saveProfile()" style="margin-left:auto;font-size:13px;font-weight:600;color:var(--blue);background:none;border:none;cursor:pointer;font-family:'Jost',sans-serif;padding:4px 0;">Save</button>
       </div>
       <div class="scroll" style="padding:24px 20px 8px;">
         <!-- Avatar -->
         <div style="display:flex;flex-direction:column;align-items:center;margin-bottom:28px;">
           <div class="av-upload" onclick="showToast('Photo upload coming soon!')">
-            <div class="av" id="ep-av" style="width:80px;height:80px;font-size:28px;background:var(--green-light);color:var(--green);">YO</div>
+            <div class="av" id="ep-av" style="width:80px;height:80px;font-size:28px;background:var(--blue-light);color:var(--blue);">YO</div>
             <div class="av-upload-badge">
               <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
             </div>
@@ -755,19 +755,19 @@ select.finput { appearance: none; background-image: url("data:image/svg+xml,%3Cs
 
         <p style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:12px;letter-spacing:0.04em;text-transform:uppercase;">Verification</p>
         <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:24px;">
-          <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border-radius:var(--rsm);background:var(--green-light);">
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border-radius:var(--rsm);background:var(--blue-light);">
             <div style="display:flex;align-items:center;gap:10px;">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2" stroke-linecap="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13.5a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 2.76H6.6a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 10.4a16 16 0 0 0 6.34 6.34l.92-.92a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7a2 2 0 0 1 1.72 2.03z"/></svg>
-              <span style="font-size:13px;color:var(--green);font-weight:500;">Phone verified</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2" stroke-linecap="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13.5a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 2.76H6.6a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 10.4a16 16 0 0 0 6.34 6.34l.92-.92a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7a2 2 0 0 1 1.72 2.03z"/></svg>
+              <span style="font-size:13px;color:var(--blue);font-weight:500;">Phone verified</span>
             </div>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
           </div>
           <div onclick="showToast('ID verification coming soon!')" style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border-radius:var(--rsm);border:1.5px dashed var(--border2);cursor:pointer;">
             <div style="display:flex;align-items:center;gap:10px;">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--hint)" stroke-width="2" stroke-linecap="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
               <span style="font-size:13px;color:var(--muted);">Verify ID for higher trust</span>
             </div>
-            <span style="font-size:12px;font-weight:600;color:var(--green);">Verify →</span>
+            <span style="font-size:12px;font-weight:600;color:var(--blue);">Verify →</span>
           </div>
         </div>
         <div style="height:8px;"></div>
@@ -785,7 +785,7 @@ select.finput { appearance: none; background-image: url("data:image/svg+xml,%3Cs
       </div>
       <!-- Tabs -->
       <div style="display:flex;border-bottom:1px solid var(--border);flex-shrink:0;" id="bh-tabs">
-        <div onclick="bhTab(0)" style="flex:1;text-align:center;padding:12px 0;font-size:13px;font-weight:600;color:var(--green);border-bottom:2px solid var(--green);cursor:pointer;">Upcoming</div>
+        <div onclick="bhTab(0)" style="flex:1;text-align:center;padding:12px 0;font-size:13px;font-weight:600;color:var(--blue);border-bottom:2px solid var(--blue);cursor:pointer;">Upcoming</div>
         <div onclick="bhTab(1)" style="flex:1;text-align:center;padding:12px 0;font-size:13px;font-weight:600;color:var(--hint);border-bottom:2px solid transparent;cursor:pointer;">Past</div>
       </div>
       <!-- Upcoming -->
@@ -803,9 +803,9 @@ select.finput { appearance: none; background-image: url("data:image/svg+xml,%3Cs
             </div>
           </div>
           <div style="padding:0 14px 14px;">
-            <div style="background:var(--green-light);border-radius:var(--rsm);padding:10px 12px;display:flex;gap:10px;align-items:center;">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2" stroke-linecap="round" style="flex-shrink:0;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-              <p style="font-size:12px;color:var(--green);margin:0;line-height:1.5;">Pickup: Lobby of building on Melrose Ave. Jessica will text you the code.</p>
+            <div style="background:var(--blue-light);border-radius:var(--rsm);padding:10px 12px;display:flex;gap:10px;align-items:center;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2" stroke-linecap="round" style="flex-shrink:0;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              <p style="font-size:12px;color:var(--blue);margin:0;line-height:1.5;">Pickup: Lobby of building on Melrose Ave. Jessica will text you the code.</p>
             </div>
           </div>
           <div class="bcard-actions">
@@ -875,19 +875,19 @@ select.finput { appearance: none; background-image: url("data:image/svg+xml,%3Cs
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
         </div>
         <p style="font-size:16px;font-weight:600;color:var(--text);margin:0;">My listings</p>
-        <div onclick="go('s-list')" style="margin-left:auto;width:32px;height:32px;border-radius:50%;background:var(--green);display:flex;align-items:center;justify-content:center;cursor:pointer;">
+        <div onclick="go('s-list')" style="margin-left:auto;width:32px;height:32px;border-radius:50%;background:var(--blue);display:flex;align-items:center;justify-content:center;cursor:pointer;">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
         </div>
       </div>
       <!-- Earnings banner -->
-      <div style="padding:14px 16px;background:var(--green-light);border-bottom:1px solid rgba(42,92,64,0.1);flex-shrink:0;display:flex;justify-content:space-between;align-items:center;">
+      <div style="padding:14px 16px;background:var(--blue-light);border-bottom:1px solid rgba(42,92,64,0.1);flex-shrink:0;display:flex;justify-content:space-between;align-items:center;">
         <div>
-          <p style="font-size:11px;font-weight:600;color:var(--green-mid);text-transform:uppercase;letter-spacing:0.06em;margin:0 0 2px;">Total earned</p>
-          <p style="font-size:20px;font-weight:700;color:var(--green);margin:0;">$0.00</p>
+          <p style="font-size:11px;font-weight:600;color:var(--blue-mid);text-transform:uppercase;letter-spacing:0.06em;margin:0 0 2px;">Total earned</p>
+          <p style="font-size:20px;font-weight:700;color:var(--blue);margin:0;">$0.00</p>
         </div>
         <div style="text-align:right;">
-          <p style="font-size:11px;font-weight:600;color:var(--green-mid);text-transform:uppercase;letter-spacing:0.06em;margin:0 0 2px;">Active listings</p>
-          <p style="font-size:20px;font-weight:700;color:var(--green);margin:0;" id="listings-count">0</p>
+          <p style="font-size:11px;font-weight:600;color:var(--blue-mid);text-transform:uppercase;letter-spacing:0.06em;margin:0 0 2px;">Active listings</p>
+          <p style="font-size:20px;font-weight:700;color:var(--blue);margin:0;" id="listings-count">0</p>
         </div>
       </div>
       <div class="scroll" style="padding:16px 16px 8px;" id="listings-scroll">
@@ -915,13 +915,13 @@ select.finput { appearance: none; background-image: url("data:image/svg+xml,%3Cs
       </div>
       <div class="scroll" style="padding:20px 16px 8px;">
         <p style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:10px;letter-spacing:0.04em;text-transform:uppercase;">Payment methods</p>
-        <div style="padding:13px 15px;border-radius:var(--rsm);border:2px solid var(--green);display:flex;align-items:center;gap:12px;margin-bottom:8px;background:var(--green-light);">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2" stroke-linecap="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+        <div style="padding:13px 15px;border-radius:var(--rsm);border:2px solid var(--blue);display:flex;align-items:center;gap:12px;margin-bottom:8px;background:var(--blue-light);">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2" stroke-linecap="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
           <div style="flex:1;">
             <p style="font-size:14px;font-weight:500;color:var(--text);margin:0 0 1px;">Visa ending 4242</p>
             <p style="font-size:11px;color:var(--hint);margin:0;">Expires 09/27 · Default</p>
           </div>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
         </div>
         <div onclick="showToast('Add card coming soon!')" style="padding:13px 15px;border-radius:var(--rsm);border:1.5px dashed var(--border2);display:flex;align-items:center;gap:12px;margin-bottom:24px;cursor:pointer;color:var(--hint);">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
@@ -973,15 +973,15 @@ select.finput { appearance: none; background-image: url("data:image/svg+xml,%3Cs
   </div>
 </div>
 
-<p class="foot">borrow — user testing prototype · Tap through the screens to explore the full flow</p>
+<p class="foot">borrowed — user testing prototype · Tap through the screens to explore the full flow</p>
 
 <script>
 const items = [
-  { name: 'Silk wrap dress', sub: 'Size 8 · Emerald green · & Other Stories', dist: '0.4 mi away', price: 12, owner: 'Jessica L.', av: 'JL', avbg: '#E8F2EC', avc: '#2A5C40', rating: '4.9 · 32 rentals', desc: 'Perfect for events or a night out. Dry-clean only — I provide a bag. Pickup at my building lobby or nearby café on Melrose.', img: 'ic0' },
+  { name: 'Silk wrap dress', sub: 'Size 8 · Emerald green · & Other Stories', dist: '0.4 mi away', price: 12, owner: 'Jessica L.', av: 'JL', avbg: '#DFF0FB', avc: '#1A6FB5', rating: '4.9 · 32 rentals', desc: 'Perfect for events or a night out. Dry-clean only — I provide a bag. Pickup at my building lobby or nearby café on Melrose.', img: 'ic0' },
   { name: 'Camel wool blazer', sub: 'Size M · Camel · Massimo Dutti', dist: '0.9 mi away', price: 9, owner: 'Marcus R.', av: 'MR', avbg: '#FDF3E0', avc: '#B8720E', rating: '4.7 · 18 rentals', desc: 'Classic blazer in excellent condition. Great for work or smart-casual occasions. Available for pickup at Silver Lake Trader Joes.', img: 'ic1' },
   { name: 'Linen jumpsuit', sub: 'Size S · Cream · Arket', dist: '1.2 mi away', price: 15, owner: 'Anika P.', av: 'AP', avbg: '#F3EDF8', avc: '#7C4DAA', rating: '5.0 · 44 rentals', desc: 'Beautiful summer jumpsuit, barely worn. Machine washable. I\'m in Los Feliz — flexible on pickup time, just message me.', img: 'ic2' },
   { name: 'Leather moto jacket', sub: 'Size S · Black · AllSaints', dist: '1.5 mi away', price: 18, owner: 'Sara C.', av: 'SC', avbg: '#EDF3F8', avc: '#2A6090', rating: '4.8 · 27 rentals', desc: 'Real leather, broken in perfectly. A classic. Currently booked today but available from tomorrow. Pickup in Echo Park.', img: 'ic3' },
-  { name: 'Floral midi dress', sub: 'Size 10 · Multicolor · Anthropologie', dist: '1.8 mi away', price: 11, owner: 'Tara N.', av: 'TN', avbg: '#E8F2EC', avc: '#2A5C40', rating: '4.6 · 11 rentals', desc: 'Gorgeous floral print, perfect for brunch or a wedding guest look. Hand wash only. Available in Highland Park.', img: 'ic4' },
+  { name: 'Floral midi dress', sub: 'Size 10 · Multicolor · Anthropologie', dist: '1.8 mi away', price: 11, owner: 'Tara N.', av: 'TN', avbg: '#DFF0FB', avc: '#1A6FB5', rating: '4.6 · 11 rentals', desc: 'Gorgeous floral print, perfect for brunch or a wedding guest look. Hand wash only. Available in Highland Park.', img: 'ic4' },
 ];
 
 let cur = 0, faved = false;
@@ -1021,8 +1021,8 @@ function saveProfile() {
 function bhTab(idx) {
   const tabs = document.querySelectorAll('#bh-tabs > div');
   tabs.forEach((t, i) => {
-    t.style.color = i === idx ? 'var(--green)' : 'var(--hint)';
-    t.style.borderBottomColor = i === idx ? 'var(--green)' : 'transparent';
+    t.style.color = i === idx ? 'var(--blue)' : 'var(--hint)';
+    t.style.borderBottomColor = i === idx ? 'var(--blue)' : 'transparent';
   });
   document.getElementById('bh-upcoming').style.display = idx === 0 ? '' : 'none';
   document.getElementById('bh-past').style.display = idx === 1 ? '' : 'none';
