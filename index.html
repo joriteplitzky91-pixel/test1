@@ -523,10 +523,44 @@ select.finput { appearance: none; background-image: url("data:image/svg+xml,%3Cs
           <div><label class="flabel">Category</label><select class="finput"><option>Dress</option><option>Jacket</option><option>Top</option><option>Trousers</option><option>Formal</option><option>Shoes</option></select></div>
           <div><label class="flabel">Size</label><select class="finput"><option>XS</option><option>S</option><option>M</option><option>L</option><option>XL</option><option>6</option><option>8</option><option>10</option><option>12</option></select></div>
         </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;">
           <div><label class="flabel">Brand</label><input type="text" class="finput" placeholder="e.g. Zara"></div>
           <div><label class="flabel">Colour</label><input type="text" class="finput" placeholder="e.g. Emerald"></div>
         </div>
+
+        <!-- Measurements -->
+        <div style="margin-bottom:20px;">
+          <div onclick="toggleMeasurements()" style="display:flex;align-items:center;justify-content:space-between;padding:11px 14px;border-radius:var(--rsm);border:1.5px dashed var(--border2);cursor:pointer;background:var(--surface2);" id="meas-toggle-row">
+            <div style="display:flex;align-items:center;gap:9px;">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2" stroke-linecap="round"><path d="M2 12h20M2 12l4-4M2 12l4 4M22 12l-4-4M22 12l-4 4"/></svg>
+              <span style="font-size:13px;font-weight:600;color:var(--muted);">Add measurements <span style="font-weight:400;color:var(--hint);">(optional)</span></span>
+            </div>
+            <svg id="meas-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--hint)" stroke-width="2" stroke-linecap="round" style="transition:transform 0.2s;"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div id="meas-panel" style="display:none;margin-top:10px;">
+            <!-- Unit toggle -->
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+              <p style="font-size:11px;color:var(--hint);margin:0;">Enter measurements below</p>
+              <div style="display:flex;border:1.5px solid var(--border2);border-radius:8px;overflow:hidden;">
+                <button id="unit-cm" onclick="setUnit('cm')" style="padding:4px 12px;font-size:12px;font-weight:600;font-family:'Jost',sans-serif;border:none;cursor:pointer;background:var(--text);color:#fff;">cm</button>
+                <button id="unit-in" onclick="setUnit('in')" style="padding:4px 12px;font-size:12px;font-weight:600;font-family:'Jost',sans-serif;border:none;cursor:pointer;background:transparent;color:var(--muted);">in</button>
+              </div>
+            </div>
+            <!-- Fields grid — shown/hidden by category -->
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;" id="meas-fields">
+              <div id="mf-bust"><label class="flabel">Bust / Chest <span id="u-bust" style="font-weight:400;text-transform:lowercase;">(cm)</span></label><input type="number" class="finput" placeholder="e.g. 88" min="40" max="200"></div>
+              <div id="mf-waist"><label class="flabel">Waist <span id="u-waist" style="font-weight:400;text-transform:lowercase;">(cm)</span></label><input type="number" class="finput" placeholder="e.g. 70" min="40" max="160"></div>
+              <div id="mf-hips"><label class="flabel">Hips <span id="u-hips" style="font-weight:400;text-transform:lowercase;">(cm)</span></label><input type="number" class="finput" placeholder="e.g. 96" min="50" max="180"></div>
+              <div id="mf-length"><label class="flabel">Total length <span id="u-length" style="font-weight:400;text-transform:lowercase;">(cm)</span></label><input type="number" class="finput" placeholder="e.g. 120" min="20" max="200"></div>
+              <div id="mf-shoulder" style="display:none;"><label class="flabel">Shoulder width <span id="u-shoulder" style="font-weight:400;text-transform:lowercase;">(cm)</span></label><input type="number" class="finput" placeholder="e.g. 38" min="20" max="80"></div>
+              <div id="mf-sleeve" style="display:none;"><label class="flabel">Sleeve length <span id="u-sleeve" style="font-weight:400;text-transform:lowercase;">(cm)</span></label><input type="number" class="finput" placeholder="e.g. 62" min="10" max="100"></div>
+              <div id="mf-inseam" style="display:none;"><label class="flabel">Inseam <span id="u-inseam" style="font-weight:400;text-transform:lowercase;">(cm)</span></label><input type="number" class="finput" placeholder="e.g. 76" min="20" max="120"></div>
+              <div id="mf-rise" style="display:none;"><label class="flabel">Rise <span id="u-rise" style="font-weight:400;text-transform:lowercase;">(cm)</span></label><input type="number" class="finput" placeholder="e.g. 28" min="10" max="60"></div>
+            </div>
+            <p style="font-size:11px;color:var(--hint);margin-top:10px;line-height:1.7;">Accurate measurements help renters confirm fit before booking and reduce returns.</p>
+          </div>
+        </div>
+
         <button class="btn btn-green" onclick="listNext(2)">Continue →</button>
         <div style="height:16px;"></div>
       </div>
@@ -1073,6 +1107,69 @@ function listNext(step) {
     document.getElementById(id).className = 'step-line' + (i + 1 < step ? ' done' : '');
   });
 }
+
+// Measurements
+let measOpen = false, measUnit = 'cm';
+
+const measByCategory = {
+  'Dress':    ['bust','waist','hips','length'],
+  'Jacket':   ['bust','waist','shoulder','sleeve','length'],
+  'Top':      ['bust','waist','shoulder','sleeve'],
+  'Trousers': ['waist','hips','inseam','rise'],
+  'Formal':   ['bust','waist','hips','length'],
+  'Shoes':    [],
+};
+const allMeasFields = ['bust','waist','hips','length','shoulder','sleeve','inseam','rise'];
+
+function toggleMeasurements() {
+  measOpen = !measOpen;
+  document.getElementById('meas-panel').style.display = measOpen ? '' : 'none';
+  document.getElementById('meas-chevron').style.transform = measOpen ? 'rotate(180deg)' : '';
+  if (measOpen) updateMeasFields();
+}
+
+function updateMeasFields() {
+  const cat = document.querySelector('#list-s1 select.finput').value;
+  const show = measByCategory[cat] || allMeasFields;
+  allMeasFields.forEach(f => {
+    const el = document.getElementById('mf-' + f);
+    if (el) el.style.display = show.includes(f) ? '' : 'none';
+  });
+}
+
+function setUnit(u) {
+  measUnit = u;
+  document.getElementById('unit-cm').style.background = u === 'cm' ? 'var(--text)' : 'transparent';
+  document.getElementById('unit-cm').style.color = u === 'cm' ? '#fff' : 'var(--muted)';
+  document.getElementById('unit-in').style.background = u === 'in' ? 'var(--text)' : 'transparent';
+  document.getElementById('unit-in').style.color = u === 'in' ? '#fff' : 'var(--muted)';
+  allMeasFields.forEach(f => {
+    const el = document.getElementById('u-' + f);
+    if (el) el.textContent = '(' + u + ')';
+    const input = document.querySelector('#mf-' + f + ' input');
+    if (!input) return;
+    if (u === 'in') {
+      input.placeholder = cmToInPlaceholder(f);
+      input.setAttribute('max', f === 'rise' ? '25' : f === 'sleeve' ? '40' : f === 'shoulder' ? '32' : '80');
+    } else {
+      input.placeholder = cmPlaceholder(f);
+      input.setAttribute('max', f === 'rise' ? '60' : f === 'sleeve' ? '100' : f === 'shoulder' ? '80' : '200');
+    }
+  });
+}
+
+function cmPlaceholder(f) {
+  return {bust:'e.g. 88',waist:'e.g. 70',hips:'e.g. 96',length:'e.g. 120',shoulder:'e.g. 38',sleeve:'e.g. 62',inseam:'e.g. 76',rise:'e.g. 28'}[f] || '';
+}
+function cmToInPlaceholder(f) {
+  return {bust:'e.g. 34.5',waist:'e.g. 27.5',hips:'e.g. 37.5',length:'e.g. 47',shoulder:'e.g. 15',sleeve:'e.g. 24.5',inseam:'e.g. 30',rise:'e.g. 11'}[f] || '';
+}
+
+// Re-run field visibility when category changes
+document.addEventListener('DOMContentLoaded', () => {
+  const catSelect = document.querySelector('#list-s1 select.finput');
+  if (catSelect) catSelect.addEventListener('change', () => { if (measOpen) updateMeasFields(); });
+});
 
 let toastTimer;
 function showToast(msg) {
