@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Borrow — Rent clothes near you</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #F5F2EE;
+  --surface: #FDFCFA;
+  --surface2: #F0EDE8;
+  --border: rgba(0,0,0,0.07);
+  --border2: rgba(0,0,0,0.13);
+  --text: #1C1A17;
+  --muted: #6A6660;
+  --hint: #A8A49D;
+  --green: #2A5C40;
+  --green-light: #E8F2EC;
+  --green-mid: #4A8C64;
+  --amber: #B8720E;
+  --amber-light: #FDF3E0;
+  --red: #C0392B;
+  --red-light: #FDECEA;
+  --r: 18px;
+  --rsm: 10px;
+}
+
+body {
+  font-family: 'Jost', sans-serif;
+  background: var(--bg);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 32px 16px 64px;
+}
+
+/* Page header */
+.page-header { text-align: center; margin-bottom: 36px; }
+.wordmark { font-family: 'Playfair Display', serif; font-size: 40px; color: var(--text); line-height: 1; margin-bottom: 6px; }
+.wordmark span { color: var(--green); font-style: italic; }
+.tagline { font-size: 13px; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; font-weight: 400; }
+.proto-badge { display: inline-flex; align-items: center; gap: 6px; margin-top: 10px; font-size: 11px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: var(--green); background: var(--green-light); padding: 5px 12px; border-radius: 20px; }
+.proto-badge::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--green); display: inline-block; animation: pulse 2s infinite; }
+@keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+/* Phone */
+.phone-shell { display: flex; flex-direction: column; align-items: center; }
+.phone {
+  width: 360px;
+  height: 760px;
+  background: var(--surface);
+  border-radius: 48px;
+  border: 1.5px solid var(--border2);
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 32px 80px rgba(0,0,0,0.12), 0 4px 16px rgba(0,0,0,0.06);
+}
+.notch { width: 100px; height: 28px; background: var(--text); border-radius: 0 0 18px 18px; margin: 0 auto; position: absolute; top: 0; left: 50%; transform: translateX(-50%); z-index: 10; }
+
+/* Screens */
+.screen { display: none; flex-direction: column; height: 100%; background: var(--surface); }
+.screen.active { display: flex; animation: fadeIn 0.2s ease; }
+@keyframes fadeIn { from { opacity: 0.6; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Status bar */
+.statusbar { display: flex; justify-content: space-between; align-items: center; padding: 36px 24px 8px; font-size: 12px; font-weight: 600; color: var(--text); flex-shrink: 0; }
+.statusbar-icons { display: flex; gap: 5px; align-items: center; }
+.statusbar-icons svg { width: 14px; height: 14px; }
+
+/* Scroll */
+.scroll { flex: 1; overflow-y: auto; scrollbar-width: none; }
+.scroll::-webkit-scrollbar { display: none; }
+
+/* Bottom nav */
+.bnav { display: flex; border-top: 1px solid var(--border); padding: 10px 0 22px; background: var(--surface); flex-shrink: 0; }
+.bnav-item { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px; cursor: pointer; color: var(--hint); font-size: 9px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; transition: color 0.15s; }
+.bnav-item:hover { color: var(--muted); }
+.bnav-item.on { color: var(--green); }
+.bnav-item svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+
+/* Buttons */
+.btn { width: 100%; padding: 15px; border-radius: var(--rsm); border: none; font-size: 15px; font-weight: 600; font-family: 'Jost', sans-serif; cursor: pointer; transition: all 0.15s; letter-spacing: 0.02em; }
+.btn:active { transform: scale(0.98); }
+.btn-green { background: var(--green); color: #fff; }
+.btn-green:hover { background: #224d35; }
+.btn-outline { background: transparent; border: 1.5px solid var(--border2); color: var(--text); }
+.btn-outline:hover { background: var(--surface2); }
+
+/* Tags */
+.tag { font-size: 11px; font-weight: 600; padding: 4px 10px; border-radius: 6px; letter-spacing: 0.04em; text-transform: uppercase; }
+.tag-green { background: var(--green-light); color: var(--green); }
+.tag-gray { background: var(--surface2); color: var(--muted); }
+.tag-amber { background: var(--amber-light); color: var(--amber); }
+
+/* Avatar */
+.av { border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600; font-family: 'Jost', sans-serif; flex-shrink: 0; }
+
+/* Stars */
+.stars { color: #D4A017; letter-spacing: 1px; }
+
+/* Form */
+.flabel { font-size: 11px; font-weight: 600; color: var(--muted); display: block; margin-bottom: 5px; letter-spacing: 0.06em; text-transform: uppercase; }
+.finput { width: 100%; padding: 12px 14px; border-radius: var(--rsm); border: 1.5px solid var(--border2); font-size: 14px; font-family: 'Jost', sans-serif; color: var(--text); background: var(--surface); outline: none; transition: border-color 0.15s; }
+.finput:focus { border-color: var(--green); }
+.finput::placeholder { color: var(--hint); }
+textarea.finput { height: 80px; resize: none; }
+select.finput { appearance: none; background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%236A6660' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; }
+
+/* Search bar */
+.searchbar { display: flex; align-items: center; gap: 10px; padding: 12px 15px; background: var(--surface2); border-radius: var(--rsm); color: var(--hint); font-size: 14px; cursor: text; }
+.searchbar svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; flex-shrink: 0; }
+
+/* Chips */
+.chips { display: flex; gap: 7px; overflow-x: auto; scrollbar-width: none; padding-bottom: 2px; }
+.chips::-webkit-scrollbar { display: none; }
+.chip { display: inline-flex; align-items: center; padding: 7px 16px; border-radius: 24px; border: 1.5px solid var(--border2); font-size: 12px; font-weight: 600; cursor: pointer; white-space: nowrap; color: var(--muted); background: var(--surface); font-family: 'Jost', sans-serif; transition: all 0.15s; letter-spacing: 0.02em; }
+.chip:hover { border-color: var(--green); color: var(--green); }
+.chip.on { background: var(--text); color: #fff; border-color: var(--text); }
+
+/* Item card */
+.icard { border-radius: var(--r); border: 1px solid var(--border); overflow: hidden; background: var(--surface); margin-bottom: 12px; cursor: pointer; transition: box-shadow 0.2s, transform 0.15s; }
+.icard:hover { box-shadow: 0 6px 24px rgba(0,0,0,0.09); transform: translateY(-1px); }
+.icard:active { transform: scale(0.99); }
+
+/* Item image placeholder */
+.iimg { display: flex; align-items: center; justify-content: center; flex-shrink: 0; position: relative; overflow: hidden; }
+.iimg-icon { opacity: 0.18; }
+.iimg-icon svg { width: 52px; height: 52px; stroke: var(--text); fill: none; stroke-width: 1.2; stroke-linecap: round; stroke-linejoin: round; }
+
+/* Divider */
+.div { height: 1px; background: var(--border); margin: 0 18px; }
+
+/* Summary row */
+.srow { display: flex; justify-content: space-between; align-items: center; padding: 11px 0; font-size: 13px; color: var(--muted); border-bottom: 1px solid var(--border); }
+.srow:last-child { border-bottom: none; font-size: 15px; font-weight: 600; color: var(--text); padding-top: 13px; }
+
+/* Step indicator */
+.steps { display: flex; align-items: center; gap: 0; margin-bottom: 20px; }
+.step-dot { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; transition: all 0.2s; }
+.step-dot.done { background: var(--green); color: #fff; }
+.step-dot.active { background: var(--text); color: #fff; }
+.step-dot.todo { background: var(--surface2); color: var(--hint); }
+.step-line { flex: 1; height: 2px; background: var(--border2); }
+.step-line.done { background: var(--green); }
+
+/* Toast */
+.toast { position: absolute; bottom: 100px; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--text); color: #fff; padding: 10px 20px; border-radius: 24px; font-size: 13px; font-weight: 500; white-space: nowrap; opacity: 0; transition: all 0.3s; pointer-events: none; z-index: 100; }
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* Date picker row */
+.datebox { flex: 1; padding: 12px 13px; border-radius: var(--rsm); border: 1.5px solid var(--border2); cursor: pointer; transition: border-color 0.15s; }
+.datebox:hover { border-color: var(--green); }
+.datebox.active { border-color: var(--green); background: var(--green-light); }
+.datebox .dl { font-size: 10px; font-weight: 600; color: var(--hint); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 3px; }
+.datebox .dv { font-size: 14px; font-weight: 600; color: var(--text); }
+
+/* Map pin placeholder */
+.mapbox { height: 110px; background: linear-gradient(145deg, #E8EDE6 0%, #D4DFD0 100%); border-radius: var(--rsm); display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; cursor: pointer; }
+.mapbox::after { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(0deg, transparent, transparent 18px, rgba(255,255,255,0.25) 18px, rgba(255,255,255,0.25) 19px), repeating-linear-gradient(90deg, transparent, transparent 18px, rgba(255,255,255,0.25) 18px, rgba(255,255,255,0.25) 19px); }
+
+/* Profile card */
+.pcard { display: flex; align-items: center; gap: 12px; padding: 14px; border-radius: var(--r); background: var(--surface2); }
+
+/* Success screen */
+.success-icon { width: 64px; height: 64px; border-radius: 50%; background: var(--green-light); display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; }
+.success-icon svg { width: 32px; height: 32px; stroke: var(--green); fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+
+/* Nav tabs below phone */
+.ntabs { display: flex; gap: 6px; margin-top: 20px; flex-wrap: wrap; justify-content: center; max-width: 360px; }
+.ntab { font-size: 12px; font-weight: 600; padding: 7px 16px; border-radius: 24px; border: 1.5px solid var(--border2); background: var(--surface); color: var(--muted); cursor: pointer; font-family: 'Jost', sans-serif; transition: all 0.15s; letter-spacing: 0.02em; }
+.ntab:hover { border-color: var(--green); color: var(--green); }
+.ntab.on { background: var(--green); color: #fff; border-color: var(--green); }
+
+.foot { margin-top: 24px; font-size: 12px; color: var(--hint); text-align: center; max-width: 300px; line-height: 1.8; }
+
+/* Item colors */
+.ic0 { background: linear-gradient(135deg, #E8E2D8 0%, #D4CFC6 100%); }
+.ic1 { background: linear-gradient(135deg, #DDE6E2 0%, #C8D8D2 100%); }
+.ic2 { background: linear-gradient(135deg, #E6E0D4 0%, #D4CAC0 100%); }
+.ic3 { background: linear-gradient(135deg, #E2DDE8 0%, #CEC8D8 100%); }
+.ic4 { background: linear-gradient(135deg, #E8E4DC 0%, #D8D2C8 100%); }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div class="wordmark">bor<span>row</span></div>
+  <p class="tagline">Rent clothes from people near you</p>
+  <span class="proto-badge">User testing prototype</span>
+</div>
+
+<div class="phone-shell">
+  <div class="phone">
+    <div class="notch"></div>
+    <div class="toast" id="toast"></div>
+
+    <!-- ═══ BROWSE ═══ -->
+    <div id="s-browse" class="screen active">
+      <div class="statusbar"><span>9:41</span><div class="statusbar-icons"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><circle cx="12" cy="20" r="1" fill="currentColor"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="16" height="10" rx="2"/><path d="M22 11v2"/></svg></div></div>
+      <div style="padding:4px 20px 14px; flex-shrink:0;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+          <div>
+            <p style="font-size:11px;color:var(--hint);text-transform:uppercase;letter-spacing:0.08em;font-weight:600;margin-bottom:2px;">Near you</p>
+            <p style="font-size:17px;font-weight:600;color:var(--text);">Los Angeles, CA <span style="font-size:12px;color:var(--muted);">▾</span></p>
+          </div>
+          <div style="width:38px;height:38px;border-radius:50%;background:var(--surface2);display:flex;align-items:center;justify-content:center;cursor:pointer;border:1px solid var(--border2);">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--text)" stroke-width="2" stroke-linecap="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          </div>
+        </div>
+        <div class="searchbar" style="margin-bottom:14px;">
+          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          Search clothes near you…
+        </div>
+        <div class="chips">
+          <span class="chip on" onclick="filterChip(this)">All</span>
+          <span class="chip" onclick="filterChip(this)">Dresses</span>
+          <span class="chip" onclick="filterChip(this)">Jackets</span>
+          <span class="chip" onclick="filterChip(this)">Tops</span>
+          <span class="chip" onclick="filterChip(this)">Trousers</span>
+          <span class="chip" onclick="filterChip(this)">Formal</span>
+          <span class="chip" onclick="filterChip(this)">Shoes</span>
+        </div>
+      </div>
+      <div class="scroll" style="padding:0 16px 8px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+          <p style="font-size:13px;color:var(--muted);">28 items within 2 miles</p>
+          <span style="font-size:12px;font-weight:600;color:var(--muted);cursor:pointer;" onclick="showToast('Filters coming soon!')">⇅ Filter</span>
+        </div>
+
+        <div class="icard" onclick="openDetail(0)">
+          <div class="iimg ic0" style="height:160px;"><div class="iimg-icon"><svg viewBox="0 0 24 24"><path d="M12 3a2 2 0 0 1 2 2c0 .74-.4 1.38-1 1.73V8l9 6H2l9-6V6.73A2 2 0 0 1 10 5a2 2 0 0 1 2-2z"/></svg></div></div>
+          <div style="padding:12px 14px 14px;">
+            <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:6px;">
+              <div><p style="font-weight:600;font-size:14px;margin:0 0 2px;color:var(--text);">Silk wrap dress</p><p style="font-size:12px;color:var(--hint);margin:0;">0.4 mi · Size 8 · Emerald</p></div>
+              <p style="font-weight:700;font-size:15px;margin:0;color:var(--text);">$12<span style="font-size:11px;font-weight:400;color:var(--hint);">/day</span></p>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between;">
+              <div style="display:flex;align-items:center;gap:7px;">
+                <div class="av" style="width:24px;height:24px;font-size:10px;background:var(--green-light);color:var(--green);">JL</div>
+                <span style="font-size:12px;color:var(--muted);">Jessica L.</span>
+                <span class="stars" style="font-size:11px;">★★★★★</span>
+                <span style="font-size:12px;color:var(--muted);">4.9</span>
+              </div>
+              <span class="tag tag-green">Available</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="icard" onclick="openDetail(1)">
+          <div class="iimg ic1" style="height:160px;"><div class="iimg-icon"><svg viewBox="0 0 24 24"><path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.57a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.57a2 2 0 0 0-1.34-2.23z"/></svg></div></div>
+          <div style="padding:12px 14px 14px;">
+            <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:6px;">
+              <div><p style="font-weight:600;font-size:14px;margin:0 0 2px;color:var(--text);">Camel wool blazer</p><p style="font-size:12px;color:var(--hint);margin:0;">0.9 mi · Size M · Camel</p></div>
+              <p style="font-weight:700;font-size:15px;margin:0;color:var(--text);">$9<span style="font-size:11px;font-weight:400;color:var(--hint);">/day</span></p>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between;">
+              <div style="display:flex;align-items:center;gap:7px;">
+                <div class="av" style="width:24px;height:24px;font-size:10px;background:var(--amber-light);color:var(--amber);">MR</div>
+                <span style="font-size:12px;color:var(--muted);">Marcus R.</span>
+                <span class="stars" style="font-size:11px;">★★★★★</span>
+                <span style="font-size:12px;color:var(--muted);">4.7</span>
+              </div>
+              <span class="tag tag-green">Available</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="icard" onclick="openDetail(2)">
+          <div class="iimg ic2" style="height:160px;"><div class="iimg-icon"><svg viewBox="0 0 24 24"><path d="M12 3a2 2 0 0 1 2 2c0 .74-.4 1.38-1 1.73V8l9 6H2l9-6V6.73A2 2 0 0 1 10 5a2 2 0 0 1 2-2z"/></svg></div></div>
+          <div style="padding:12px 14px 14px;">
+            <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:6px;">
+              <div><p style="font-weight:600;font-size:14px;margin:0 0 2px;color:var(--text);">Linen jumpsuit</p><p style="font-size:12px;color:var(--hint);margin:0;">1.2 mi · Size S · Cream</p></div>
+              <p style="font-weight:700;font-size:15px;margin:0;color:var(--text);">$15<span style="font-size:11px;font-weight:400;color:var(--hint);">/day</span></p>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between;">
+              <div style="display:flex;align-items:center;gap:7px;">
+                <div class="av" style="width:24px;height:24px;font-size:10px;background:#F3EDF8;color:#7C4DAA;">AP</div>
+                <span style="font-size:12px;color:var(--muted);">Anika P.</span>
+                <span class="stars" style="font-size:11px;">★★★★★</span>
+                <span style="font-size:12px;color:var(--muted);">5.0</span>
+              </div>
+              <span class="tag tag-green">Available</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="icard" onclick="openDetail(3)">
+          <div class="iimg ic3" style="height:160px;"><div class="iimg-icon"><svg viewBox="0 0 24 24"><path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.57a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.57a2 2 0 0 0-1.34-2.23z"/></svg></div></div>
+          <div style="padding:12px 14px 14px;">
+            <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:6px;">
+              <div><p style="font-weight:600;font-size:14px;margin:0 0 2px;color:var(--text);">Leather moto jacket</p><p style="font-size:12px;color:var(--hint);margin:0;">1.5 mi · Size S · Black</p></div>
+              <p style="font-weight:700;font-size:15px;margin:0;color:var(--text);">$18<span style="font-size:11px;font-weight:400;color:var(--hint);">/day</span></p>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between;">
+              <div style="display:flex;align-items:center;gap:7px;">
+                <div class="av" style="width:24px;height:24px;font-size:10px;background:#EDF3F8;color:#2A6090;">SC</div>
+                <span style="font-size:12px;color:var(--muted);">Sara C.</span>
+                <span class="stars" style="font-size:11px;">★★★★★</span>
+                <span style="font-size:12px;color:var(--muted);">4.8</span>
+              </div>
+              <span class="tag tag-amber">Booked today</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="icard" onclick="openDetail(4)">
+          <div class="iimg ic4" style="height:160px;"><div class="iimg-icon"><svg viewBox="0 0 24 24"><path d="M12 3a2 2 0 0 1 2 2c0 .74-.4 1.38-1 1.73V8l9 6H2l9-6V6.73A2 2 0 0 1 10 5a2 2 0 0 1 2-2z"/></svg></div></div>
+          <div style="padding:12px 14px 14px;">
+            <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:6px;">
+              <div><p style="font-weight:600;font-size:14px;margin:0 0 2px;color:var(--text);">Floral midi dress</p><p style="font-size:12px;color:var(--hint);margin:0;">1.8 mi · Size 10 · Multicolor</p></div>
+              <p style="font-weight:700;font-size:15px;margin:0;color:var(--text);">$11<span style="font-size:11px;font-weight:400;color:var(--hint);">/day</span></p>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between;">
+              <div style="display:flex;align-items:center;gap:7px;">
+                <div class="av" style="width:24px;height:24px;font-size:10px;background:var(--green-light);color:var(--green);">TN</div>
+                <span style="font-size:12px;color:var(--muted);">Tara N.</span>
+                <span class="stars" style="font-size:11px;">★★★★★</span>
+                <span style="font-size:12px;color:var(--muted);">4.6</span>
+              </div>
+              <span class="tag tag-green">Available</span>
+            </div>
+          </div>
+        </div>
+        <div style="height:8px;"></div>
+      </div>
+      <div class="bnav">
+        <div class="bnav-item on"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Browse</div>
+        <div class="bnav-item" onclick="showToast('Map view coming soon!')"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>Map</div>
+        <div class="bnav-item" onclick="go('s-list')"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>List</div>
+        <div class="bnav-item" onclick="showToast('2 saved items')"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>Saved</div>
+        <div class="bnav-item" onclick="go('s-profile')"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Profile</div>
+      </div>
+    </div>
+
+    <!-- ═══ DETAIL ═══ -->
+    <div id="s-detail" class="screen">
+      <div class="statusbar"><span>9:41</span><div class="statusbar-icons"></div></div>
+      <div style="padding:4px 20px 12px;display:flex;justify-content:space-between;align-items:center;flex-shrink:0;">
+        <div onclick="go('s-browse')" style="width:36px;height:36px;border-radius:50%;background:var(--surface2);display:flex;align-items:center;justify-content:center;cursor:pointer;border:1px solid var(--border2);">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        </div>
+        <div id="fav-btn" onclick="toggleFav()" style="width:36px;height:36px;border-radius:50%;background:var(--surface2);display:flex;align-items:center;justify-content:center;cursor:pointer;border:1px solid var(--border2);">
+          <svg id="fav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--text)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        </div>
+      </div>
+      <div id="detail-img" class="iimg ic0" style="height:220px;flex-shrink:0;"><div class="iimg-icon"><svg viewBox="0 0 24 24" style="width:64px;height:64px;"><path d="M12 3a2 2 0 0 1 2 2c0 .74-.4 1.38-1 1.73V8l9 6H2l9-6V6.73A2 2 0 0 1 10 5a2 2 0 0 1 2-2z"/></svg></div></div>
+      <div class="scroll" style="padding:16px 20px 0;">
+        <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:4px;">
+          <p id="d-name" style="font-size:20px;font-weight:600;color:var(--text);margin:0;font-family:'Playfair Display',serif;"></p>
+          <p id="d-price" style="font-size:19px;font-weight:700;margin:0;color:var(--text);white-space:nowrap;margin-left:10px;"></p>
+        </div>
+        <p id="d-sub" style="font-size:13px;color:var(--muted);margin:0 0 12px;"></p>
+        <div style="display:flex;gap:8px;margin-bottom:16px;">
+          <span id="d-status" class="tag tag-green">Available now</span>
+          <span id="d-dist" class="tag tag-gray"></span>
+        </div>
+        <div class="pcard" style="margin-bottom:16px;">
+          <div id="d-av" class="av" style="width:40px;height:40px;font-size:14px;background:var(--green-light);color:var(--green);"></div>
+          <div style="flex:1;">
+            <p id="d-owner" style="font-size:14px;font-weight:600;margin:0;color:var(--text);"></p>
+            <p id="d-rating" style="font-size:12px;color:var(--hint);margin:0;"></p>
+          </div>
+          <div onclick="showToast('Messaging coming soon!')" style="width:34px;height:34px;border-radius:50%;background:var(--surface);display:flex;align-items:center;justify-content:center;cursor:pointer;border:1px solid var(--border2);">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          </div>
+        </div>
+        <p id="d-desc" style="font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:16px;"></p>
+        <p style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:8px;letter-spacing:0.04em;text-transform:uppercase;">Select dates</p>
+        <div style="display:flex;gap:8px;margin-bottom:16px;">
+          <div class="datebox active" onclick="showToast('Date picker coming soon!')"><div class="dl">From</div><div class="dv">May 14</div></div>
+          <div class="datebox" onclick="showToast('Date picker coming soon!')"><div class="dl">To</div><div class="dv">May 16</div></div>
+        </div>
+        <div style="background:var(--surface2);border-radius:var(--rsm);padding:14px 16px;margin-bottom:16px;">
+          <div class="srow"><span>2 days × <span id="d-ppd"></span></span><span id="d-sub-total"></span></div>
+          <div class="srow"><span>Service fee</span><span>$2</span></div>
+          <div class="srow"><span>Total</span><span id="d-total"></span></div>
+        </div>
+        <div style="background:var(--amber-light);border-radius:var(--rsm);padding:12px 14px;margin-bottom:20px;display:flex;gap:10px;align-items:start;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2" stroke-linecap="round" style="flex-shrink:0;margin-top:1px;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          <p style="font-size:12px;color:var(--amber);margin:0;line-height:1.6;">A $50 damage deposit will be held and released within 48 hours of return.</p>
+        </div>
+        <div style="height:8px;"></div>
+      </div>
+      <div style="padding:12px 20px 26px;border-top:1px solid var(--border);background:var(--surface);flex-shrink:0;">
+        <button class="btn btn-green" id="reserve-btn" onclick="go('s-checkout')">Reserve · <span id="d-cta-price"></span></button>
+      </div>
+    </div>
+
+    <!-- ═══ CHECKOUT ═══ -->
+    <div id="s-checkout" class="screen">
+      <div class="statusbar"><span>9:41</span><div class="statusbar-icons"></div></div>
+      <div style="padding:4px 20px 14px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--border);flex-shrink:0;">
+        <div onclick="go('s-detail')" style="width:36px;height:36px;border-radius:50%;background:var(--surface2);display:flex;align-items:center;justify-content:center;cursor:pointer;border:1px solid var(--border2);">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        </div>
+        <p style="font-size:16px;font-weight:600;color:var(--text);margin:0;">Confirm booking</p>
+      </div>
+      <div class="scroll" style="padding:18px 20px 0;">
+        <div style="display:flex;gap:12px;padding:14px;background:var(--surface2);border-radius:var(--r);margin-bottom:22px;">
+          <div id="co-img" class="iimg ic0" style="width:56px;height:56px;border-radius:10px;flex-shrink:0;"><div class="iimg-icon"><svg viewBox="0 0 24 24" style="width:24px;height:24px;"><path d="M12 3a2 2 0 0 1 2 2c0 .74-.4 1.38-1 1.73V8l9 6H2l9-6V6.73A2 2 0 0 1 10 5a2 2 0 0 1 2-2z"/></svg></div></div>
+          <div><p id="co-name" style="font-size:14px;font-weight:600;margin:0 0 3px;color:var(--text);"></p><p style="font-size:12px;color:var(--hint);margin:0 0 3px;">May 14 – May 16 · 2 days</p><p id="co-owner" style="font-size:12px;color:var(--muted);margin:0;"></p></div>
+        </div>
+
+        <p style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:10px;letter-spacing:0.04em;text-transform:uppercase;">Payment method</p>
+        <div style="padding:13px 15px;border-radius:var(--rsm);border:2px solid var(--green);display:flex;align-items:center;gap:12px;margin-bottom:8px;background:var(--green-light);cursor:pointer;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2" stroke-linecap="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+          <span style="flex:1;font-size:14px;font-weight:500;color:var(--text);">Visa ending 4242</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div onclick="showToast('Add payment coming soon!')" style="padding:13px 15px;border-radius:var(--rsm);border:1.5px dashed var(--border2);display:flex;align-items:center;gap:12px;margin-bottom:22px;cursor:pointer;color:var(--hint);">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          <span style="font-size:14px;">Add payment method</span>
+        </div>
+
+        <p style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:10px;letter-spacing:0.04em;text-transform:uppercase;">Order summary</p>
+        <div style="background:var(--surface2);border-radius:var(--rsm);padding:14px 16px;margin-bottom:14px;">
+          <div class="srow"><span>2 days × <span id="co-ppd"></span>/day</span><span id="co-sub"></span></div>
+          <div class="srow"><span>Service fee</span><span>$2</span></div>
+          <div class="srow"><span>Total due today</span><span id="co-total"></span></div>
+        </div>
+        <p style="font-size:11px;color:var(--hint);line-height:1.8;margin-bottom:20px;">By confirming, you agree to our <span style="color:var(--green);cursor:pointer;" onclick="showToast('Terms coming soon!')">rental terms</span>. A $50 damage deposit will be held on your card and released within 48 hours of a successful return.</p>
+        <div style="height:8px;"></div>
+      </div>
+      <div style="padding:12px 20px 26px;border-top:1px solid var(--border);background:var(--surface);flex-shrink:0;">
+        <button class="btn btn-green" onclick="go('s-confirm')">Confirm &amp; pay <span id="co-cta"></span></button>
+      </div>
+    </div>
+
+    <!-- ═══ CONFIRM ═══ -->
+    <div id="s-confirm" class="screen">
+      <div class="statusbar"><span>9:41</span><div class="statusbar-icons"></div></div>
+      <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 28px;text-align:center;">
+        <div class="success-icon" style="width:72px;height:72px;margin-bottom:20px;">
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <p style="font-family:'Playfair Display',serif;font-size:26px;color:var(--text);margin-bottom:8px;">You're confirmed!</p>
+        <p style="font-size:14px;color:var(--muted);line-height:1.7;margin-bottom:28px;">Your rental for <strong id="cf-name" style="color:var(--text);font-weight:600;"></strong> is booked for <strong style="color:var(--text);">May 14 – 16</strong>. Jessica will send pickup details shortly.</p>
+        <div style="background:var(--surface2);border-radius:var(--r);padding:18px 20px;width:100%;margin-bottom:28px;text-align:left;">
+          <p style="font-size:11px;font-weight:600;color:var(--hint);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:12px;">Booking details</p>
+          <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:8px;"><span style="color:var(--muted);">Item</span><span id="cf-item" style="font-weight:600;color:var(--text);"></span></div>
+          <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:8px;"><span style="color:var(--muted);">Dates</span><span style="font-weight:600;color:var(--text);">May 14 – 16</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:8px;"><span style="color:var(--muted);">Lender</span><span id="cf-owner" style="font-weight:600;color:var(--text);"></span></div>
+          <div style="display:flex;justify-content:space-between;font-size:13px;"><span style="color:var(--muted);">Total paid</span><span id="cf-total" style="font-weight:600;color:var(--text);"></span></div>
+        </div>
+        <button class="btn btn-green" onclick="go('s-browse')" style="margin-bottom:10px;">Back to browsing</button>
+        <button class="btn btn-outline" onclick="showToast('Booking history coming soon!')">View booking</button>
+      </div>
+    </div>
+
+    <!-- ═══ LIST ═══ -->
+    <div id="s-list" class="screen">
+      <div class="statusbar"><span>9:41</span><div class="statusbar-icons"></div></div>
+      <div style="padding:4px 20px 14px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--border);flex-shrink:0;">
+        <div onclick="go('s-browse')" style="width:36px;height:36px;border-radius:50%;background:var(--surface2);display:flex;align-items:center;justify-content:center;cursor:pointer;border:1px solid var(--border2);">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text)" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </div>
+        <p style="font-size:16px;font-weight:600;color:var(--text);margin:0;">List an item</p>
+        <span style="margin-left:auto;font-size:12px;color:var(--muted);">Step <span id="list-step-label">1</span> of 3</span>
+      </div>
+
+      <!-- Step indicator -->
+      <div style="padding:16px 20px 0;flex-shrink:0;">
+        <div class="steps">
+          <div class="step-dot active" id="sd1">1</div>
+          <div class="step-line" id="sl1"></div>
+          <div class="step-dot todo" id="sd2">2</div>
+          <div class="step-line" id="sl2"></div>
+          <div class="step-dot todo" id="sd3">3</div>
+        </div>
+      </div>
+
+      <!-- Step 1: Photos + basics -->
+      <div id="list-s1" class="scroll" style="padding:12px 20px 8px;">
+        <p style="font-size:15px;font-weight:600;color:var(--text);margin-bottom:14px;">Photos & basics</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:18px;">
+          <div onclick="showToast('Camera coming soon!')" style="height:90px;background:var(--surface2);border-radius:var(--rsm);border:1.5px dashed var(--border2);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer;">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--hint)" stroke-width="1.8" stroke-linecap="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+            <span style="font-size:11px;color:var(--hint);font-weight:600;">Add photo</span>
+          </div>
+          <div onclick="showToast('Camera coming soon!')" style="height:90px;background:var(--surface2);border-radius:var(--rsm);border:1.5px dashed var(--border2);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer;">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--hint)" stroke-width="1.8" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            <span style="font-size:11px;color:var(--hint);font-weight:600;">Add more</span>
+          </div>
+        </div>
+        <div style="margin-bottom:14px;"><label class="flabel">Item name</label><input type="text" class="finput" placeholder="e.g. Silk wrap dress" id="l-name"></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;">
+          <div><label class="flabel">Category</label><select class="finput"><option>Dress</option><option>Jacket</option><option>Top</option><option>Trousers</option><option>Formal</option><option>Shoes</option></select></div>
+          <div><label class="flabel">Size</label><select class="finput"><option>XS</option><option>S</option><option>M</option><option>L</option><option>XL</option><option>6</option><option>8</option><option>10</option><option>12</option></select></div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;">
+          <div><label class="flabel">Brand</label><input type="text" class="finput" placeholder="e.g. Zara"></div>
+          <div><label class="flabel">Colour</label><input type="text" class="finput" placeholder="e.g. Emerald"></div>
+        </div>
+        <button class="btn btn-green" onclick="listNext(2)">Continue →</button>
+        <div style="height:16px;"></div>
+      </div>
+
+      <!-- Step 2: Pricing + description -->
+      <div id="list-s2" class="scroll" style="padding:12px 20px 8px;display:none;">
+        <p style="font-size:15px;font-weight:600;color:var(--text);margin-bottom:14px;">Pricing & description</p>
+        <div style="margin-bottom:14px;"><label class="flabel">Price per day ($)</label><input type="number" class="finput" placeholder="12" id="l-price"></div>
+        <div style="margin-bottom:14px;"><label class="flabel">Min rental (days)</label><select class="finput"><option>1 day</option><option>2 days</option><option>3 days</option></select></div>
+        <div style="margin-bottom:14px;"><label class="flabel">Condition</label><select class="finput"><option>Excellent — like new</option><option>Good — minor signs of wear</option><option>Fair — visible wear</option></select></div>
+        <div style="margin-bottom:20px;"><label class="flabel">Description</label><textarea class="finput" placeholder="Condition, care instructions, pickup details, what occasions it suits…" style="height:100px;"></textarea></div>
+        <div style="display:flex;gap:10px;">
+          <button class="btn btn-outline" style="flex:1;" onclick="listNext(1)">← Back</button>
+          <button class="btn btn-green" style="flex:2;" onclick="listNext(3)">Continue →</button>
+        </div>
+        <div style="height:16px;"></div>
+      </div>
+
+      <!-- Step 3: Location + publish -->
+      <div id="list-s3" class="scroll" style="padding:12px 20px 8px;display:none;">
+        <p style="font-size:15px;font-weight:600;color:var(--text);margin-bottom:14px;">Pickup location</p>
+        <div class="mapbox" style="margin-bottom:14px;" onclick="showToast('Location picker coming soon!')">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="1.5" stroke-linecap="round" style="position:relative;z-index:1;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        </div>
+        <div style="padding:12px 14px;border-radius:var(--rsm);border:1.5px solid var(--border2);display:flex;align-items:center;gap:10px;margin-bottom:14px;cursor:pointer;" onclick="showToast('Location picker coming soon!')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2" stroke-linecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          <span style="font-size:14px;color:var(--text);">West Hollywood, CA 90046</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--hint)" stroke-width="2" stroke-linecap="round" style="margin-left:auto;"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        </div>
+        <div style="margin-bottom:20px;"><label class="flabel">Pickup notes (optional)</label><input type="text" class="finput" placeholder="e.g. lobby of my building, or nearby café"></div>
+        <div style="background:var(--green-light);border-radius:var(--rsm);padding:14px 16px;margin-bottom:20px;">
+          <p style="font-size:12px;font-weight:600;color:var(--green);margin-bottom:6px;">Your estimated earnings</p>
+          <p style="font-size:22px;font-weight:700;color:var(--green);margin:0;">$9.60<span style="font-size:13px;font-weight:400;color:var(--green-mid);"> /day</span></p>
+          <p style="font-size:11px;color:var(--green-mid);margin:4px 0 0;">After 20% platform fee. You keep 80%.</p>
+        </div>
+        <div style="display:flex;gap:10px;margin-bottom:16px;">
+          <button class="btn btn-outline" style="flex:1;" onclick="listNext(2)">← Back</button>
+          <button class="btn btn-green" style="flex:2;" onclick="go('s-listed')">Publish listing</button>
+        </div>
+        <div style="height:16px;"></div>
+      </div>
+    </div>
+
+    <!-- ═══ LISTED ═══ -->
+    <div id="s-listed" class="screen">
+      <div class="statusbar"><span>9:41</span><div class="statusbar-icons"></div></div>
+      <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 28px;text-align:center;">
+        <div style="font-size:48px;margin-bottom:16px;">🎉</div>
+        <p style="font-family:'Playfair Display',serif;font-size:26px;color:var(--text);margin-bottom:8px;">You're live!</p>
+        <p style="font-size:14px;color:var(--muted);line-height:1.7;margin-bottom:28px;">Your item is now visible to renters near you. We'll notify you when someone wants to book.</p>
+        <div style="background:var(--surface2);border-radius:var(--r);padding:18px 20px;width:100%;margin-bottom:28px;text-align:left;">
+          <p style="font-size:11px;font-weight:600;color:var(--hint);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:12px;">What happens next</p>
+          <div style="display:flex;gap:10px;margin-bottom:12px;align-items:start;">
+            <span style="width:22px;height:22px;border-radius:50%;background:var(--green);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">1</span>
+            <p style="font-size:13px;color:var(--muted);margin:0;line-height:1.6;">A renter requests your item — you approve or decline within 24h.</p>
+          </div>
+          <div style="display:flex;gap:10px;margin-bottom:12px;align-items:start;">
+            <span style="width:22px;height:22px;border-radius:50%;background:var(--green);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">2</span>
+            <p style="font-size:13px;color:var(--muted);margin:0;line-height:1.6;">Arrange pickup at your chosen location.</p>
+          </div>
+          <div style="display:flex;gap:10px;align-items:start;">
+            <span style="width:22px;height:22px;border-radius:50%;background:var(--green);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">3</span>
+            <p style="font-size:13px;color:var(--muted);margin:0;line-height:1.6;">Get paid when they return it. Simple.</p>
+          </div>
+        </div>
+        <button class="btn btn-green" onclick="go('s-browse')" style="margin-bottom:10px;">Browse other items</button>
+        <button class="btn btn-outline" onclick="showToast('Your listings coming soon!')">Manage my listings</button>
+      </div>
+    </div>
+
+    <!-- ═══ PROFILE ═══ -->
+    <div id="s-profile" class="screen">
+      <div class="statusbar"><span>9:41</span><div class="statusbar-icons"></div></div>
+      <div style="padding:4px 20px 14px;border-bottom:1px solid var(--border);flex-shrink:0;">
+        <p style="font-size:16px;font-weight:600;color:var(--text);margin:0;">Profile</p>
+      </div>
+      <div class="scroll" style="padding:20px 20px 8px;">
+        <div style="display:flex;flex-direction:column;align-items:center;margin-bottom:24px;padding-bottom:24px;border-bottom:1px solid var(--border);">
+          <div class="av" style="width:72px;height:72px;font-size:24px;background:var(--green-light);color:var(--green);margin-bottom:12px;">YO</div>
+          <p style="font-size:18px;font-weight:600;color:var(--text);margin:0 0 2px;font-family:'Playfair Display',serif;">Your Name</p>
+          <p style="font-size:13px;color:var(--hint);margin:0 0 12px;">Member since May 2025</p>
+          <div style="display:flex;gap:24px;">
+            <div style="text-align:center;"><p style="font-size:20px;font-weight:700;color:var(--text);margin:0;">0</p><p style="font-size:11px;color:var(--hint);font-weight:600;text-transform:uppercase;letter-spacing:0.05em;">Rentals</p></div>
+            <div style="width:1px;background:var(--border);"></div>
+            <div style="text-align:center;"><p style="font-size:20px;font-weight:700;color:var(--text);margin:0;">0</p><p style="font-size:11px;color:var(--hint);font-weight:600;text-transform:uppercase;letter-spacing:0.05em;">Listings</p></div>
+            <div style="width:1px;background:var(--border);"></div>
+            <div style="text-align:center;"><p style="font-size:20px;font-weight:700;color:var(--text);margin:0;">—</p><p style="font-size:11px;color:var(--hint);font-weight:600;text-transform:uppercase;letter-spacing:0.05em;">Rating</p></div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:2px;">
+          <div onclick="showToast('Edit profile coming soon!')" style="display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--border);cursor:pointer;">
+            <span style="font-size:14px;color:var(--text);">Edit profile</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--hint)" stroke-width="2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+          <div onclick="showToast('Booking history coming soon!')" style="display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--border);cursor:pointer;">
+            <span style="font-size:14px;color:var(--text);">Booking history</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--hint)" stroke-width="2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+          <div onclick="showToast('My listings coming soon!')" style="display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--border);cursor:pointer;">
+            <span style="font-size:14px;color:var(--text);">My listings</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--hint)" stroke-width="2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+          <div onclick="showToast('Payment settings coming soon!')" style="display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--border);cursor:pointer;">
+            <span style="font-size:14px;color:var(--text);">Payment & payouts</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--hint)" stroke-width="2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+          <div onclick="showToast('Settings coming soon!')" style="display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--border);cursor:pointer;">
+            <span style="font-size:14px;color:var(--text);">Notifications</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--hint)" stroke-width="2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+          <div onclick="showToast('Help coming soon!')" style="display:flex;align-items:center;justify-content:space-between;padding:14px 0;cursor:pointer;">
+            <span style="font-size:14px;color:var(--text);">Help & support</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--hint)" stroke-width="2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+        </div>
+        <div style="height:16px;"></div>
+      </div>
+      <div class="bnav">
+        <div class="bnav-item" onclick="go('s-browse')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Browse</div>
+        <div class="bnav-item" onclick="showToast('Map view coming soon!')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>Map</div>
+        <div class="bnav-item" onclick="go('s-list')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>List</div>
+        <div class="bnav-item" onclick="showToast('2 saved items')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>Saved</div>
+        <div class="bnav-item on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Profile</div>
+      </div>
+    </div>
+
+  </div><!-- /phone -->
+
+  <div class="ntabs">
+    <button class="ntab on" onclick="navTo('s-browse', this)">Browse</button>
+    <button class="ntab" onclick="navTo('s-detail', this)">Item detail</button>
+    <button class="ntab" onclick="navTo('s-checkout', this)">Checkout</button>
+    <button class="ntab" onclick="navTo('s-list', this)">List an item</button>
+    <button class="ntab" onclick="navTo('s-profile', this)">Profile</button>
+  </div>
+</div>
+
+<p class="foot">borrow — user testing prototype · Tap through the screens to explore the full flow</p>
+
+<script>
+const items = [
+  { name: 'Silk wrap dress', sub: 'Size 8 · Emerald green · & Other Stories', dist: '0.4 mi away', price: 12, owner: 'Jessica L.', av: 'JL', avbg: '#E8F2EC', avc: '#2A5C40', rating: '4.9 · 32 rentals', desc: 'Perfect for events or a night out. Dry-clean only — I provide a bag. Pickup at my building lobby or nearby café on Melrose.', img: 'ic0' },
+  { name: 'Camel wool blazer', sub: 'Size M · Camel · Massimo Dutti', dist: '0.9 mi away', price: 9, owner: 'Marcus R.', av: 'MR', avbg: '#FDF3E0', avc: '#B8720E', rating: '4.7 · 18 rentals', desc: 'Classic blazer in excellent condition. Great for work or smart-casual occasions. Available for pickup at Silver Lake Trader Joes.', img: 'ic1' },
+  { name: 'Linen jumpsuit', sub: 'Size S · Cream · Arket', dist: '1.2 mi away', price: 15, owner: 'Anika P.', av: 'AP', avbg: '#F3EDF8', avc: '#7C4DAA', rating: '5.0 · 44 rentals', desc: 'Beautiful summer jumpsuit, barely worn. Machine washable. I\'m in Los Feliz — flexible on pickup time, just message me.', img: 'ic2' },
+  { name: 'Leather moto jacket', sub: 'Size S · Black · AllSaints', dist: '1.5 mi away', price: 18, owner: 'Sara C.', av: 'SC', avbg: '#EDF3F8', avc: '#2A6090', rating: '4.8 · 27 rentals', desc: 'Real leather, broken in perfectly. A classic. Currently booked today but available from tomorrow. Pickup in Echo Park.', img: 'ic3' },
+  { name: 'Floral midi dress', sub: 'Size 10 · Multicolor · Anthropologie', dist: '1.8 mi away', price: 11, owner: 'Tara N.', av: 'TN', avbg: '#E8F2EC', avc: '#2A5C40', rating: '4.6 · 11 rentals', desc: 'Gorgeous floral print, perfect for brunch or a wedding guest look. Hand wash only. Available in Highland Park.', img: 'ic4' },
+];
+
+let cur = 0, faved = false;
+
+function go(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('.ntab').forEach(b => b.classList.remove('on'));
+  const map = {'s-browse':0,'s-detail':1,'s-checkout':2,'s-list':3,'s-profile':4};
+  if (map[id] !== undefined) document.querySelectorAll('.ntab')[map[id]].classList.add('on');
+}
+
+function navTo(id, btn) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('.ntab').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+}
+
+function openDetail(i) {
+  cur = i;
+  const it = items[i];
+  faved = false;
+  document.getElementById('d-name').textContent = it.name;
+  document.getElementById('d-price').innerHTML = '$' + it.price + '<span style="font-size:12px;font-weight:400;color:var(--hint);">/day</span>';
+  document.getElementById('d-sub').textContent = it.sub;
+  document.getElementById('d-dist').textContent = it.dist;
+  document.getElementById('d-av').textContent = it.av;
+  document.getElementById('d-av').style.background = it.avbg;
+  document.getElementById('d-av').style.color = it.avc;
+  document.getElementById('d-owner').textContent = it.owner;
+  document.getElementById('d-rating').innerHTML = '★ ' + it.rating;
+  document.getElementById('d-desc').textContent = it.desc;
+  document.getElementById('d-ppd').textContent = '$' + it.price;
+  const sub = it.price * 2;
+  document.getElementById('d-sub-total').textContent = '$' + sub;
+  document.getElementById('d-total').textContent = '$' + (sub + 2);
+  document.getElementById('d-cta-price').textContent = '$' + (sub + 2);
+  const img = document.getElementById('detail-img');
+  img.className = 'iimg ' + it.img;
+  img.style.height = '220px'; img.style.flexShrink = '0';
+  document.getElementById('fav-icon').style.fill = 'none';
+  document.getElementById('fav-icon').style.stroke = 'var(--text)';
+  // populate checkout
+  document.getElementById('co-name').textContent = it.name;
+  document.getElementById('co-owner').textContent = it.owner + ' · ' + it.dist;
+  document.getElementById('co-ppd').textContent = '$' + it.price;
+  document.getElementById('co-sub').textContent = '$' + sub;
+  document.getElementById('co-total').textContent = '$' + (sub + 2);
+  document.getElementById('co-cta').textContent = '$' + (sub + 2);
+  const coimg = document.getElementById('co-img');
+  coimg.className = 'iimg ' + it.img;
+  coimg.style.width = '56px'; coimg.style.height = '56px'; coimg.style.borderRadius = '10px'; coimg.style.flexShrink = '0';
+  // confirm
+  document.getElementById('cf-name').textContent = it.name;
+  document.getElementById('cf-item').textContent = it.name;
+  document.getElementById('cf-owner').textContent = it.owner;
+  document.getElementById('cf-total').textContent = '$' + (sub + 2);
+  go('s-detail');
+}
+
+function toggleFav() {
+  faved = !faved;
+  const ic = document.getElementById('fav-icon');
+  ic.style.fill = faved ? '#C0392B' : 'none';
+  ic.style.stroke = faved ? '#C0392B' : 'var(--text)';
+  showToast(faved ? 'Saved to your wishlist' : 'Removed from wishlist');
+}
+
+function filterChip(el) {
+  document.querySelectorAll('.chip').forEach(c => c.classList.remove('on'));
+  el.classList.add('on');
+  showToast('Filtering by ' + el.textContent + '…');
+}
+
+function listNext(step) {
+  document.getElementById('list-s1').style.display = 'none';
+  document.getElementById('list-s2').style.display = 'none';
+  document.getElementById('list-s3').style.display = 'none';
+  document.getElementById('list-s' + step).style.display = '';
+  document.getElementById('list-step-label').textContent = step;
+  ['sd1','sd2','sd3'].forEach((id, i) => {
+    const el = document.getElementById(id);
+    if (i + 1 < step) { el.className = 'step-dot done'; el.textContent = '✓'; }
+    else if (i + 1 === step) { el.className = 'step-dot active'; el.textContent = i + 1; }
+    else { el.className = 'step-dot todo'; el.textContent = i + 1; }
+  });
+  ['sl1','sl2'].forEach((id, i) => {
+    document.getElementById(id).className = 'step-line' + (i + 1 < step ? ' done' : '');
+  });
+}
+
+let toastTimer;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2200);
+}
+</script>
+</body>
+</html>
