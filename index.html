@@ -166,6 +166,37 @@ select.finput { appearance: none; background-image: url("data:image/svg+xml,%3Cs
 /* Profile card */
 .pcard { display: flex; align-items: center; gap: 12px; padding: 14px; border-radius: var(--r); background: var(--surface2); }
 
+/* Profile menu row */
+.pmrow { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; border-bottom: 1px solid var(--border); cursor: pointer; }
+.pmrow:last-child { border-bottom: none; }
+.pmrow-left { display: flex; align-items: center; gap: 12px; }
+.pmrow-icon { width: 34px; height: 34px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+
+/* Booking card */
+.bcard { border-radius: var(--r); border: 1px solid var(--border); overflow: hidden; background: var(--surface); margin-bottom: 12px; }
+.bcard-header { display: flex; gap: 12px; padding: 14px; }
+.bcard-actions { border-top: 1px solid var(--border); display: flex; }
+.bcard-action { flex: 1; padding: 11px 0; font-size: 13px; font-weight: 600; color: var(--muted); text-align: center; cursor: pointer; font-family: 'Jost', sans-serif; border: none; background: none; }
+.bcard-action:hover { color: var(--text); }
+.bcard-action + .bcard-action { border-left: 1px solid var(--border); }
+
+/* Listing card */
+.lcard { border-radius: var(--r); border: 1px solid var(--border); overflow: hidden; background: var(--surface); margin-bottom: 12px; display: flex; }
+.lcard-img { width: 80px; flex-shrink: 0; }
+.lcard-body { flex: 1; padding: 12px 14px; display: flex; flex-direction: column; justify-content: space-between; }
+
+/* Toggle switch */
+.toggle { position: relative; width: 38px; height: 22px; flex-shrink: 0; }
+.toggle input { opacity: 0; width: 0; height: 0; }
+.toggle-track { position: absolute; inset: 0; border-radius: 22px; background: var(--border2); cursor: pointer; transition: background 0.2s; }
+.toggle input:checked + .toggle-track { background: var(--green); }
+.toggle-track::after { content: ''; position: absolute; left: 3px; top: 3px; width: 16px; height: 16px; border-radius: 50%; background: #fff; transition: transform 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.2); }
+.toggle input:checked + .toggle-track::after { transform: translateX(16px); }
+
+/* Avatar upload circle */
+.av-upload { position: relative; cursor: pointer; }
+.av-upload-badge { position: absolute; bottom: 0; right: 0; width: 22px; height: 22px; border-radius: 50%; background: var(--green); display: flex; align-items: center; justify-content: center; border: 2px solid var(--surface); }
+
 /* Success screen */
 .success-icon { width: 64px; height: 64px; border-radius: 50%; background: var(--green-light); display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; }
 .success-icon svg { width: 32px; height: 32px; stroke: var(--green); fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
@@ -573,44 +604,71 @@ select.finput { appearance: none; background-image: url("data:image/svg+xml,%3Cs
         <p style="font-size:16px;font-weight:600;color:var(--text);margin:0;">Profile</p>
       </div>
       <div class="scroll" style="padding:20px 20px 8px;">
+        <!-- Hero card -->
         <div style="display:flex;flex-direction:column;align-items:center;margin-bottom:24px;padding-bottom:24px;border-bottom:1px solid var(--border);">
-          <div class="av" style="width:72px;height:72px;font-size:24px;background:var(--green-light);color:var(--green);margin-bottom:12px;">YO</div>
-          <p style="font-size:18px;font-weight:600;color:var(--text);margin:0 0 2px;font-family:'Playfair Display',serif;">Your Name</p>
-          <p style="font-size:13px;color:var(--hint);margin:0 0 12px;">Member since May 2025</p>
+          <div class="av" id="profile-av" style="width:72px;height:72px;font-size:24px;background:var(--green-light);color:var(--green);margin-bottom:12px;">YO</div>
+          <p id="profile-name" style="font-size:18px;font-weight:600;color:var(--text);margin:0 0 2px;font-family:'Playfair Display',serif;">Your Name</p>
+          <p id="profile-bio" style="font-size:13px;color:var(--hint);margin:0 0 12px;text-align:center;"></p>
+          <p style="font-size:12px;color:var(--hint);margin:0 0 14px;">Member since May 2025</p>
           <div style="display:flex;gap:24px;">
-            <div style="text-align:center;"><p style="font-size:20px;font-weight:700;color:var(--text);margin:0;">0</p><p style="font-size:11px;color:var(--hint);font-weight:600;text-transform:uppercase;letter-spacing:0.05em;">Rentals</p></div>
+            <div style="text-align:center;"><p id="stat-rentals" style="font-size:20px;font-weight:700;color:var(--text);margin:0;">1</p><p style="font-size:11px;color:var(--hint);font-weight:600;text-transform:uppercase;letter-spacing:0.05em;">Rentals</p></div>
             <div style="width:1px;background:var(--border);"></div>
-            <div style="text-align:center;"><p style="font-size:20px;font-weight:700;color:var(--text);margin:0;">0</p><p style="font-size:11px;color:var(--hint);font-weight:600;text-transform:uppercase;letter-spacing:0.05em;">Listings</p></div>
+            <div style="text-align:center;"><p id="stat-listings" style="font-size:20px;font-weight:700;color:var(--text);margin:0;">0</p><p style="font-size:11px;color:var(--hint);font-weight:600;text-transform:uppercase;letter-spacing:0.05em;">Listings</p></div>
             <div style="width:1px;background:var(--border);"></div>
-            <div style="text-align:center;"><p style="font-size:20px;font-weight:700;color:var(--text);margin:0;">—</p><p style="font-size:11px;color:var(--hint);font-weight:600;text-transform:uppercase;letter-spacing:0.05em;">Rating</p></div>
+            <div style="text-align:center;"><p style="font-size:20px;font-weight:700;color:var(--text);margin:0;">4.8</p><p style="font-size:11px;color:var(--hint);font-weight:600;text-transform:uppercase;letter-spacing:0.05em;">Rating</p></div>
           </div>
         </div>
-        <div style="display:flex;flex-direction:column;gap:2px;">
-          <div onclick="showToast('Edit profile coming soon!')" style="display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--border);cursor:pointer;">
-            <span style="font-size:14px;color:var(--text);">Edit profile</span>
+
+        <!-- Menu -->
+        <div style="margin-bottom:8px;">
+          <div class="pmrow" onclick="go('s-edit-profile')">
+            <div class="pmrow-left">
+              <div class="pmrow-icon" style="background:#E8F2EC;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2" stroke-linecap="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+              <span style="font-size:14px;color:var(--text);">Edit profile</span>
+            </div>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--hint)" stroke-width="2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
           </div>
-          <div onclick="showToast('Booking history coming soon!')" style="display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--border);cursor:pointer;">
-            <span style="font-size:14px;color:var(--text);">Booking history</span>
+          <div class="pmrow" onclick="go('s-bookings')">
+            <div class="pmrow-left">
+              <div class="pmrow-icon" style="background:#EDF3F8;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2A6090" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+              <div>
+                <span style="font-size:14px;color:var(--text);">Booking history</span>
+                <span style="margin-left:8px;font-size:11px;font-weight:600;background:var(--green-light);color:var(--green);padding:2px 7px;border-radius:10px;">1 active</span>
+              </div>
+            </div>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--hint)" stroke-width="2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
           </div>
-          <div onclick="showToast('My listings coming soon!')" style="display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--border);cursor:pointer;">
-            <span style="font-size:14px;color:var(--text);">My listings</span>
+          <div class="pmrow" onclick="go('s-my-listings')">
+            <div class="pmrow-left">
+              <div class="pmrow-icon" style="background:#FDF3E0;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2" stroke-linecap="round"><path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.57a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.57a2 2 0 0 0-1.34-2.23z"/></svg></div>
+              <span style="font-size:14px;color:var(--text);">My listings</span>
+            </div>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--hint)" stroke-width="2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
           </div>
-          <div onclick="showToast('Payment settings coming soon!')" style="display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--border);cursor:pointer;">
-            <span style="font-size:14px;color:var(--text);">Payment & payouts</span>
+          <div class="pmrow" onclick="go('s-payment')">
+            <div class="pmrow-left">
+              <div class="pmrow-icon" style="background:#F3EDF8;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#7C4DAA" stroke-width="2" stroke-linecap="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div>
+              <span style="font-size:14px;color:var(--text);">Payment &amp; payouts</span>
+            </div>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--hint)" stroke-width="2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
           </div>
-          <div onclick="showToast('Settings coming soon!')" style="display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--border);cursor:pointer;">
-            <span style="font-size:14px;color:var(--text);">Notifications</span>
+          <div class="pmrow" onclick="showToast('Notifications coming soon!')">
+            <div class="pmrow-left">
+              <div class="pmrow-icon" style="background:var(--surface2);"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2" stroke-linecap="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></div>
+              <span style="font-size:14px;color:var(--text);">Notifications</span>
+            </div>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--hint)" stroke-width="2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
           </div>
-          <div onclick="showToast('Help coming soon!')" style="display:flex;align-items:center;justify-content:space-between;padding:14px 0;cursor:pointer;">
-            <span style="font-size:14px;color:var(--text);">Help & support</span>
+          <div class="pmrow" onclick="showToast('Help coming soon!')">
+            <div class="pmrow-left">
+              <div class="pmrow-icon" style="background:var(--surface2);"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+              <span style="font-size:14px;color:var(--text);">Help &amp; support</span>
+            </div>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--hint)" stroke-width="2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
           </div>
         </div>
+
+        <button class="btn btn-outline" style="margin-top:8px;color:var(--red);border-color:var(--red-light);" onclick="showToast('Signed out')">Sign out</button>
         <div style="height:16px;"></div>
       </div>
       <div class="bnav">
@@ -622,6 +680,250 @@ select.finput { appearance: none; background-image: url("data:image/svg+xml,%3Cs
       </div>
     </div>
 
+    <!-- ═══ EDIT PROFILE ═══ -->
+    <div id="s-edit-profile" class="screen">
+      <div class="statusbar"><span>9:41</span><div class="statusbar-icons"></div></div>
+      <div style="padding:4px 20px 14px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--border);flex-shrink:0;">
+        <div onclick="go('s-profile')" style="width:36px;height:36px;border-radius:50%;background:var(--surface2);display:flex;align-items:center;justify-content:center;cursor:pointer;border:1px solid var(--border2);">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        </div>
+        <p style="font-size:16px;font-weight:600;color:var(--text);margin:0;">Edit profile</p>
+        <button onclick="saveProfile()" style="margin-left:auto;font-size:13px;font-weight:600;color:var(--green);background:none;border:none;cursor:pointer;font-family:'Jost',sans-serif;padding:4px 0;">Save</button>
+      </div>
+      <div class="scroll" style="padding:24px 20px 8px;">
+        <!-- Avatar -->
+        <div style="display:flex;flex-direction:column;align-items:center;margin-bottom:28px;">
+          <div class="av-upload" onclick="showToast('Photo upload coming soon!')">
+            <div class="av" id="ep-av" style="width:80px;height:80px;font-size:28px;background:var(--green-light);color:var(--green);">YO</div>
+            <div class="av-upload-badge">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+            </div>
+          </div>
+          <p style="font-size:12px;color:var(--hint);margin-top:8px;">Tap to change photo</p>
+        </div>
+
+        <div style="margin-bottom:16px;">
+          <label class="flabel">Display name</label>
+          <input type="text" class="finput" id="ep-name" value="Your Name" placeholder="Your name">
+        </div>
+        <div style="margin-bottom:16px;">
+          <label class="flabel">Bio</label>
+          <input type="text" class="finput" id="ep-bio" placeholder="e.g. Fashion lover in LA · size 8">
+        </div>
+        <div style="margin-bottom:16px;">
+          <label class="flabel">Location</label>
+          <input type="text" class="finput" id="ep-location" value="Los Angeles, CA" placeholder="Your city">
+        </div>
+        <div style="margin-bottom:24px;">
+          <label class="flabel">Preferred sizes</label>
+          <input type="text" class="finput" id="ep-sizes" placeholder="e.g. S / 8 / EU 36">
+        </div>
+
+        <p style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:12px;letter-spacing:0.04em;text-transform:uppercase;">Verification</p>
+        <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:24px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border-radius:var(--rsm);background:var(--green-light);">
+            <div style="display:flex;align-items:center;gap:10px;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2" stroke-linecap="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13.5a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 2.76H6.6a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 10.4a16 16 0 0 0 6.34 6.34l.92-.92a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7a2 2 0 0 1 1.72 2.03z"/></svg>
+              <span style="font-size:13px;color:var(--green);font-weight:500;">Phone verified</span>
+            </div>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <div onclick="showToast('ID verification coming soon!')" style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border-radius:var(--rsm);border:1.5px dashed var(--border2);cursor:pointer;">
+            <div style="display:flex;align-items:center;gap:10px;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--hint)" stroke-width="2" stroke-linecap="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+              <span style="font-size:13px;color:var(--muted);">Verify ID for higher trust</span>
+            </div>
+            <span style="font-size:12px;font-weight:600;color:var(--green);">Verify →</span>
+          </div>
+        </div>
+        <div style="height:8px;"></div>
+      </div>
+    </div>
+
+    <!-- ═══ BOOKING HISTORY ═══ -->
+    <div id="s-bookings" class="screen">
+      <div class="statusbar"><span>9:41</span><div class="statusbar-icons"></div></div>
+      <div style="padding:4px 20px 14px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--border);flex-shrink:0;">
+        <div onclick="go('s-profile')" style="width:36px;height:36px;border-radius:50%;background:var(--surface2);display:flex;align-items:center;justify-content:center;cursor:pointer;border:1px solid var(--border2);">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        </div>
+        <p style="font-size:16px;font-weight:600;color:var(--text);margin:0;">Booking history</p>
+      </div>
+      <!-- Tabs -->
+      <div style="display:flex;border-bottom:1px solid var(--border);flex-shrink:0;" id="bh-tabs">
+        <div onclick="bhTab(0)" style="flex:1;text-align:center;padding:12px 0;font-size:13px;font-weight:600;color:var(--green);border-bottom:2px solid var(--green);cursor:pointer;">Upcoming</div>
+        <div onclick="bhTab(1)" style="flex:1;text-align:center;padding:12px 0;font-size:13px;font-weight:600;color:var(--hint);border-bottom:2px solid transparent;cursor:pointer;">Past</div>
+      </div>
+      <!-- Upcoming -->
+      <div id="bh-upcoming" class="scroll" style="padding:16px 16px 8px;">
+        <div class="bcard">
+          <div class="bcard-header">
+            <div class="iimg ic0" style="width:56px;height:56px;border-radius:10px;flex-shrink:0;"><div class="iimg-icon"><svg viewBox="0 0 24 24" style="width:22px;height:22px;"><path d="M12 3a2 2 0 0 1 2 2c0 .74-.4 1.38-1 1.73V8l9 6H2l9-6V6.73A2 2 0 0 1 10 5a2 2 0 0 1 2-2z"/></svg></div></div>
+            <div style="flex:1;">
+              <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:4px;">
+                <p style="font-size:14px;font-weight:600;color:var(--text);margin:0;">Silk wrap dress</p>
+                <span class="tag tag-green" style="font-size:10px;">Active</span>
+              </div>
+              <p style="font-size:12px;color:var(--hint);margin:0 0 3px;">May 14 – May 16 · 2 days</p>
+              <p style="font-size:12px;color:var(--muted);margin:0;">Jessica L. · $26 paid</p>
+            </div>
+          </div>
+          <div style="padding:0 14px 14px;">
+            <div style="background:var(--green-light);border-radius:var(--rsm);padding:10px 12px;display:flex;gap:10px;align-items:center;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2" stroke-linecap="round" style="flex-shrink:0;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              <p style="font-size:12px;color:var(--green);margin:0;line-height:1.5;">Pickup: Lobby of building on Melrose Ave. Jessica will text you the code.</p>
+            </div>
+          </div>
+          <div class="bcard-actions">
+            <button class="bcard-action" onclick="showToast('Messaging coming soon!')">Message lender</button>
+            <button class="bcard-action" onclick="showToast('Booking details coming soon!')">View details</button>
+          </div>
+        </div>
+        <div style="height:8px;"></div>
+      </div>
+      <!-- Past -->
+      <div id="bh-past" class="scroll" style="padding:16px 16px 8px;display:none;">
+        <div class="bcard">
+          <div class="bcard-header">
+            <div class="iimg ic3" style="width:56px;height:56px;border-radius:10px;flex-shrink:0;"><div class="iimg-icon"><svg viewBox="0 0 24 24" style="width:22px;height:22px;"><path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.57a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.57a2 2 0 0 0-1.34-2.23z"/></svg></div></div>
+            <div style="flex:1;">
+              <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:4px;">
+                <p style="font-size:14px;font-weight:600;color:var(--text);margin:0;">Leather moto jacket</p>
+                <span class="tag tag-gray" style="font-size:10px;">Returned</span>
+              </div>
+              <p style="font-size:12px;color:var(--hint);margin:0 0 3px;">Apr 28 – Apr 30 · 2 days</p>
+              <p style="font-size:12px;color:var(--muted);margin:0;">Sara C. · $38 paid</p>
+            </div>
+          </div>
+          <div style="padding:0 14px 2px;">
+            <div style="display:flex;gap:2px;margin-bottom:12px;">
+              <span style="color:#D4A017;font-size:16px;">★★★★★</span>
+              <span style="font-size:12px;color:var(--muted);align-self:center;margin-left:6px;">You rated this 5 stars</span>
+            </div>
+          </div>
+          <div class="bcard-actions">
+            <button class="bcard-action" onclick="showToast('Rent again coming soon!')">Rent again</button>
+            <button class="bcard-action" onclick="showToast('Receipt coming soon!')">Receipt</button>
+          </div>
+        </div>
+        <div class="bcard">
+          <div class="bcard-header">
+            <div class="iimg ic1" style="width:56px;height:56px;border-radius:10px;flex-shrink:0;"><div class="iimg-icon"><svg viewBox="0 0 24 24" style="width:22px;height:22px;"><path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.57a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.57a2 2 0 0 0-1.34-2.23z"/></svg></div></div>
+            <div style="flex:1;">
+              <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:4px;">
+                <p style="font-size:14px;font-weight:600;color:var(--text);margin:0;">Camel wool blazer</p>
+                <span class="tag tag-gray" style="font-size:10px;">Returned</span>
+              </div>
+              <p style="font-size:12px;color:var(--hint);margin:0 0 3px;">Apr 10 – Apr 12 · 2 days</p>
+              <p style="font-size:12px;color:var(--muted);margin:0;">Marcus R. · $20 paid</p>
+            </div>
+          </div>
+          <div style="padding:0 14px 2px;">
+            <div style="display:flex;gap:2px;margin-bottom:12px;">
+              <span style="color:#D4A017;font-size:16px;">★★★★</span><span style="color:#D4A017;font-size:16px;opacity:0.3;">★</span>
+              <span style="font-size:12px;color:var(--muted);align-self:center;margin-left:6px;">You rated this 4 stars</span>
+            </div>
+          </div>
+          <div class="bcard-actions">
+            <button class="bcard-action" onclick="showToast('Rent again coming soon!')">Rent again</button>
+            <button class="bcard-action" onclick="showToast('Receipt coming soon!')">Receipt</button>
+          </div>
+        </div>
+        <div style="height:8px;"></div>
+      </div>
+    </div>
+
+    <!-- ═══ MY LISTINGS ═══ -->
+    <div id="s-my-listings" class="screen">
+      <div class="statusbar"><span>9:41</span><div class="statusbar-icons"></div></div>
+      <div style="padding:4px 20px 14px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--border);flex-shrink:0;">
+        <div onclick="go('s-profile')" style="width:36px;height:36px;border-radius:50%;background:var(--surface2);display:flex;align-items:center;justify-content:center;cursor:pointer;border:1px solid var(--border2);">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        </div>
+        <p style="font-size:16px;font-weight:600;color:var(--text);margin:0;">My listings</p>
+        <div onclick="go('s-list')" style="margin-left:auto;width:32px;height:32px;border-radius:50%;background:var(--green);display:flex;align-items:center;justify-content:center;cursor:pointer;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        </div>
+      </div>
+      <!-- Earnings banner -->
+      <div style="padding:14px 16px;background:var(--green-light);border-bottom:1px solid rgba(42,92,64,0.1);flex-shrink:0;display:flex;justify-content:space-between;align-items:center;">
+        <div>
+          <p style="font-size:11px;font-weight:600;color:var(--green-mid);text-transform:uppercase;letter-spacing:0.06em;margin:0 0 2px;">Total earned</p>
+          <p style="font-size:20px;font-weight:700;color:var(--green);margin:0;">$0.00</p>
+        </div>
+        <div style="text-align:right;">
+          <p style="font-size:11px;font-weight:600;color:var(--green-mid);text-transform:uppercase;letter-spacing:0.06em;margin:0 0 2px;">Active listings</p>
+          <p style="font-size:20px;font-weight:700;color:var(--green);margin:0;" id="listings-count">0</p>
+        </div>
+      </div>
+      <div class="scroll" style="padding:16px 16px 8px;" id="listings-scroll">
+        <!-- Empty state -->
+        <div id="listings-empty" style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 20px;text-align:center;">
+          <div style="width:60px;height:60px;border-radius:50%;background:var(--surface2);display:flex;align-items:center;justify-content:center;margin-bottom:16px;">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--hint)" stroke-width="1.5" stroke-linecap="round"><path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.57a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.57a2 2 0 0 0-1.34-2.23z"/></svg>
+          </div>
+          <p style="font-size:16px;font-weight:600;color:var(--text);margin:0 0 6px;font-family:'Playfair Display',serif;">No listings yet</p>
+          <p style="font-size:13px;color:var(--muted);line-height:1.7;margin:0 0 20px;">Earn money from clothes you're not wearing. It takes under 3 minutes to list.</p>
+          <button class="btn btn-green" style="width:auto;padding:12px 28px;" onclick="go('s-list')">List your first item</button>
+        </div>
+        <div style="height:8px;"></div>
+      </div>
+    </div>
+
+    <!-- ═══ PAYMENT & PAYOUTS ═══ -->
+    <div id="s-payment" class="screen">
+      <div class="statusbar"><span>9:41</span><div class="statusbar-icons"></div></div>
+      <div style="padding:4px 20px 14px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--border);flex-shrink:0;">
+        <div onclick="go('s-profile')" style="width:36px;height:36px;border-radius:50%;background:var(--surface2);display:flex;align-items:center;justify-content:center;cursor:pointer;border:1px solid var(--border2);">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        </div>
+        <p style="font-size:16px;font-weight:600;color:var(--text);margin:0;">Payment &amp; payouts</p>
+      </div>
+      <div class="scroll" style="padding:20px 16px 8px;">
+        <p style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:10px;letter-spacing:0.04em;text-transform:uppercase;">Payment methods</p>
+        <div style="padding:13px 15px;border-radius:var(--rsm);border:2px solid var(--green);display:flex;align-items:center;gap:12px;margin-bottom:8px;background:var(--green-light);">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2" stroke-linecap="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+          <div style="flex:1;">
+            <p style="font-size:14px;font-weight:500;color:var(--text);margin:0 0 1px;">Visa ending 4242</p>
+            <p style="font-size:11px;color:var(--hint);margin:0;">Expires 09/27 · Default</p>
+          </div>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div onclick="showToast('Add card coming soon!')" style="padding:13px 15px;border-radius:var(--rsm);border:1.5px dashed var(--border2);display:flex;align-items:center;gap:12px;margin-bottom:24px;cursor:pointer;color:var(--hint);">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          <span style="font-size:14px;">Add payment method</span>
+        </div>
+
+        <p style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:10px;letter-spacing:0.04em;text-transform:uppercase;">Payout account</p>
+        <div onclick="showToast('Bank account setup coming soon!')" style="padding:13px 15px;border-radius:var(--rsm);border:1.5px dashed var(--border2);display:flex;align-items:center;gap:12px;margin-bottom:8px;cursor:pointer;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2" stroke-linecap="round"><rect x="3" y="8" width="18" height="12" rx="2"/><path d="M7 8V6a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v2"/><line x1="12" y1="12" x2="12" y2="16"/></svg>
+          <div style="flex:1;">
+            <p style="font-size:14px;color:var(--text);margin:0 0 1px;">Connect bank account</p>
+            <p style="font-size:11px;color:var(--hint);margin:0;">Required to receive payouts</p>
+          </div>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--hint)" stroke-width="2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </div>
+        <p style="font-size:11px;color:var(--hint);line-height:1.7;margin-bottom:24px;">Payouts are sent within 24 hours of a successful return. You keep 80% of the rental price.</p>
+
+        <p style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:10px;letter-spacing:0.04em;text-transform:uppercase;">Transaction history</p>
+        <div style="border-radius:var(--rsm);border:1px solid var(--border);overflow:hidden;margin-bottom:8px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 14px;border-bottom:1px solid var(--border);">
+            <div><p style="font-size:13px;font-weight:500;color:var(--text);margin:0 0 2px;">Silk wrap dress · 2 days</p><p style="font-size:11px;color:var(--hint);margin:0;">May 14, 2026</p></div>
+            <p style="font-size:14px;font-weight:600;color:var(--red);margin:0;">−$26</p>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 14px;border-bottom:1px solid var(--border);">
+            <div><p style="font-size:13px;font-weight:500;color:var(--text);margin:0 0 2px;">Leather moto jacket · 2 days</p><p style="font-size:11px;color:var(--hint);margin:0;">Apr 28, 2026</p></div>
+            <p style="font-size:14px;font-weight:600;color:var(--red);margin:0;">−$38</p>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 14px;">
+            <div><p style="font-size:13px;font-weight:500;color:var(--text);margin:0 0 2px;">Camel wool blazer · 2 days</p><p style="font-size:11px;color:var(--hint);margin:0;">Apr 10, 2026</p></div>
+            <p style="font-size:14px;font-weight:600;color:var(--red);margin:0;">−$20</p>
+          </div>
+        </div>
+        <div style="height:8px;"></div>
+      </div>
+    </div>
+
   </div><!-- /phone -->
 
   <div class="ntabs">
@@ -630,6 +932,10 @@ select.finput { appearance: none; background-image: url("data:image/svg+xml,%3Cs
     <button class="ntab" onclick="navTo('s-checkout', this)">Checkout</button>
     <button class="ntab" onclick="navTo('s-list', this)">List an item</button>
     <button class="ntab" onclick="navTo('s-profile', this)">Profile</button>
+    <button class="ntab" onclick="navTo('s-edit-profile', this)">Edit profile</button>
+    <button class="ntab" onclick="navTo('s-bookings', this)">Bookings</button>
+    <button class="ntab" onclick="navTo('s-my-listings', this)">My listings</button>
+    <button class="ntab" onclick="navTo('s-payment', this)">Payment</button>
   </div>
 </div>
 
@@ -645,13 +951,47 @@ const items = [
 ];
 
 let cur = 0, faved = false;
+const profile = { name: 'Your Name', bio: '', initials: 'YO' };
 
 function go(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
   document.querySelectorAll('.ntab').forEach(b => b.classList.remove('on'));
-  const map = {'s-browse':0,'s-detail':1,'s-checkout':2,'s-list':3,'s-profile':4};
+  const map = {'s-browse':0,'s-detail':1,'s-checkout':2,'s-list':3,'s-profile':4,'s-edit-profile':5,'s-bookings':6,'s-my-listings':7,'s-payment':8};
   if (map[id] !== undefined) document.querySelectorAll('.ntab')[map[id]].classList.add('on');
+  if (id === 's-edit-profile') syncEditForm();
+}
+
+function syncEditForm() {
+  document.getElementById('ep-name').value = profile.name;
+  document.getElementById('ep-bio').value = profile.bio;
+  document.getElementById('ep-av').textContent = profile.initials;
+}
+
+function saveProfile() {
+  const name = document.getElementById('ep-name').value.trim() || 'Your Name';
+  const bio = document.getElementById('ep-bio').value.trim();
+  const words = name.split(' ').filter(Boolean);
+  const initials = (words[0][0] + (words[1] ? words[1][0] : '')).toUpperCase();
+  profile.name = name;
+  profile.bio = bio;
+  profile.initials = initials;
+  document.getElementById('profile-name').textContent = name;
+  document.getElementById('profile-bio').textContent = bio;
+  document.getElementById('profile-av').textContent = initials;
+  document.getElementById('ep-av').textContent = initials;
+  showToast('Profile saved');
+  go('s-profile');
+}
+
+function bhTab(idx) {
+  const tabs = document.querySelectorAll('#bh-tabs > div');
+  tabs.forEach((t, i) => {
+    t.style.color = i === idx ? 'var(--green)' : 'var(--hint)';
+    t.style.borderBottomColor = i === idx ? 'var(--green)' : 'transparent';
+  });
+  document.getElementById('bh-upcoming').style.display = idx === 0 ? '' : 'none';
+  document.getElementById('bh-past').style.display = idx === 1 ? '' : 'none';
 }
 
 function navTo(id, btn) {
